@@ -9,4 +9,4 @@ WORKDIR /app
 
 RUN npm install
 
-RUN npm run generate:kjv && npm run build
+CMD npm run generate:kjv && npm run build
