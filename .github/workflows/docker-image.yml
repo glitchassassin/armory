@@ -17,7 +17,7 @@ jobs:
     - name: Build the Docker image
       run: docker build -t builder .
     - name: Build the site
-      run: docker run builder -v ${{ github.workspace }}:/app
+      run: docker run -v ${{ github.workspace }}:/app builder
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v1.0.7
     - name: Deploy GitHub Pages site
