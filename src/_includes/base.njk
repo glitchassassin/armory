@@ -1,0 +1,26 @@
+---
+title: Armory
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 16pt;
+        }
+        html, body {
+            background-color: #0e0e0e;
+            color: #e8e8e8;
+        }
+    </style>
+  </head>
+  <body>
+    {{ content | safe }}
+  </body>
+</html>

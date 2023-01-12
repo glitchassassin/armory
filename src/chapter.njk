@@ -1,0 +1,19 @@
+---
+layout: base
+pagination:
+    data: bible.chapters
+    size: 1
+    alias: chapter
+permalink: "{{ chapter.book | slug }}/{{ chapter.chapter }}/"
+eleventyComputed:
+    title: "Armory | {{ chapter.book }} {{ chapter.chapter }}"
+---
+
+<main>
+    <header>
+        <h1>Chapter {{ chapter.chapter }}</h1>
+    </header>
+    <article>
+        {{ chapter.content | safe }}
+    </article>
+</main>

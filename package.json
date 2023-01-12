@@ -1,0 +1,26 @@
+{
+  "name": "armory",
+  "version": "1.0.0",
+  "description": "A beautiful static site Bible reader for SWORD modules",
+  "main": "index.js",
+  "scripts": {
+    "build": "eleventy --input src/",
+    "start": "eleventy --input src/ --serve",
+    "generate:kjv": "node utils/bible.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glitchassassin/armory.git"
+  },
+  "author": "Jon Winsley",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/glitchassassin/armory/issues"
+  },
+  "homepage": "https://github.com/glitchassassin/armory#readme",
+  "dependencies": {
+    "@11ty/eleventy": "^1.0.2",
+    "chapter-and-verse": "^3.0.4",
+    "node-sword-interface": "^1.0.8"
+  }
+}
