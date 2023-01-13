@@ -7,6 +7,4 @@ RUN sudo apt-get update && \
 COPY . /app
 WORKDIR /app
 
-RUN npm install
-
-CMD npm run generate:kjv && npm run build
+CMD npm install && npm run generate:kjv && npm run build
