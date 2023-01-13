@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/devcontainers/typescript-node:0-18
 
-USER node
+USER root
 
 RUN sudo apt-get update && \
     sudo apt-get upgrade && \

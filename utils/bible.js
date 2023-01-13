@@ -21,7 +21,8 @@ async function main() {
     const version = "KJVPCE";
 
     // Reload Bible module
-    const interface = new NodeSwordInterface();
+    fs.mkdirSync(path.join(__dirname, "../.sword"));
+    const interface = new NodeSwordInterface(path.join(__dirname, "../.sword"));
     interface.refreshLocalModules();
     if (!interface.getLocalModule(version)) {
         // await interface.uninstallModule(version);
