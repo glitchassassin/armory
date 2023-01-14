@@ -1,5 +1,5 @@
 ---
-layout: base
+layout: article
 pagination:
     data: bible.books
     size: 1
@@ -7,19 +7,13 @@ pagination:
 permalink: "{{ book.title | slug }}/"
 eleventyComputed:
     title: "Armory | {{ chapter.book }}"
+    pageHeader: "{{ book.title }}"
 ---
 
-<main>
-    <header>
-        <h1>{{ book.title }}</h1>
-    </header>
-    <article>
-        {{ book.introduction | safe }}
+{{ book.introduction | safe }}
 
-        <ul>
-        {% for chapter in range(1, book.chapters) %}
-            <li><a href="/{{book.title | slug}}/{{chapter}}/">Chapter {{chapter}}</a></li>
-        {% endfor %}
-        </ul>
-    </article>
-</main>
+<ul class="toc">
+{% for chapter in range(1, book.chapters + 1) %}
+    <li><a href="/{{book.title | slug}}/{{chapter}}/">Chapter {{chapter}}</a></li>
+{% endfor %}
+</ul>

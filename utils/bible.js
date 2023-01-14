@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const slugify = require('slugify');
 const NodeSwordInterface = require('node-sword-interface');
 const chapterAndVerse = require('chapter-and-verse');
 
@@ -21,7 +22,9 @@ async function main() {
     const version = "KJVPCE";
 
     // Reload Bible module
-    fs.mkdirSync(path.join(__dirname, "../.sword"));
+    try {
+        fs.mkdirSync(path.join(__dirname, "../.sword"));
+    } catch (e) { }
     const interface = new NodeSwordInterface(path.join(__dirname, "../.sword"));
     interface.refreshLocalModules();
     if (!interface.getLocalModule(version)) {
@@ -38,18 +41,28 @@ async function main() {
     const books = interface.getBookList(version).map(book => (
         {
             title: chapterAndVerse(book).book.name,
+            slug: `/${slugify(chapterAndVerse(book).book.name, { lower: true })}/`,
             chapters: interface.getBookChapterCount(version, book),
             introduction: interface.getBookIntroduction(version, book)
         }
     ));
 
-    const chapters = books.flatMap(({title, chapters}) => {
+    const chapterList = books.flatMap(({title, slug, chapters}) => {
         return new Array(chapters).fill(0).map((_, i) => ({
             book: title,
             chapter: i + 1,
-            content: cleanText(interface.getChapterText(version, title, i).map(v => v.content).join(" "))
+            slug: `${slug}${i + 1}/`
         }))
-    })
+    });
+
+    const chapters = chapterList.map(({book, chapter, slug}, i) => ({
+        book,
+        chapter,
+        slug,
+        content: cleanText(interface.getChapterText(version, book, chapter).map(v => v.content).join(" ")),
+        prevChapter: chapterList[i - 1]?.slug,
+        nextChapter: chapterList[i + 1]?.slug,
+    }))
 
     const output = JSON.stringify({
         books,

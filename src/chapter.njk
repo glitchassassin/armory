@@ -1,19 +1,15 @@
 ---
-layout: base
+layout: paginated_article
 pagination:
     data: bible.chapters
     size: 1
     alias: chapter
-permalink: "{{ chapter.book | slug }}/{{ chapter.chapter }}/"
+permalink: "{{ chapter.slug }}"
 eleventyComputed:
     title: "Armory | {{ chapter.book }} {{ chapter.chapter }}"
+    pageHeader: "Chapter {{ chapter.chapter }}"
+    prevPage: "{{ chapter.prevChapter }}"
+    nextPage: "{{ chapter.nextChapter }}"
 ---
 
-<main>
-    <header>
-        <h1>Chapter {{ chapter.chapter }}</h1>
-    </header>
-    <article>
-        {{ chapter.content | safe }}
-    </article>
-</main>
+{{ chapter.content | safe }}
