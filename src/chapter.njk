@@ -1,15 +1,36 @@
 ---
-layout: paginated_article
+layout: base
 pagination:
     data: bible.chapters
     size: 1
     alias: chapter
 permalink: "{{ chapter.slug }}"
 eleventyComputed:
-    title: "Armory | {{ chapter.book }} {{ chapter.chapter }}"
+    title: "Armory | {{ bible.books[chapter.book].title }} {{ chapter.chapter }}"
     pageHeader: "Chapter {{ chapter.chapter }}"
     prevPage: "{{ chapter.prevChapter }}"
     nextPage: "{{ chapter.nextChapter }}"
 ---
 
-{{ chapter.content | safe }}
+<div class="page-controls container g-0">
+    {% if prevPage %}
+        <a href="{{ prevPage }}" class="prev link-light text-center fs-1"><span class="d-block text-center position-fixed">❬</span></a>
+    {% else %}
+        <span></span>
+    {% endif %}
+    
+    <main>
+        <header>
+            <h1><a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a></h1>
+            <h2><a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a></h2>
+        </header>
+        <article>
+            {{ chapter.content | safe }}
+        </article>
+    </main>
+    {% if nextPage %}
+    <a href="{{ nextPage }}" class="next link-light text-center fs-1"><span class="d-block text-center position-fixed">〉</span></a>
+    {% else %}
+        <span></span>
+    {% endif %}
+</div>

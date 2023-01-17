@@ -1,19 +1,28 @@
 ---
-layout: article
+layout: base
 pagination:
     data: bible.books
     size: 1
     alias: book
-permalink: "{{ book.title | slug }}/"
+    resolve: values
+permalink: "{{ book.slug }}"
 eleventyComputed:
     title: "Armory | {{ chapter.book }}"
     pageHeader: "{{ book.title }}"
 ---
+<main class="container">
+    <header>
+        <h1><a href="{{book.slug}}" class="link-light">{{ book.title }}</a></h1>
+    </header>
+    <article>
+        <p>
+            {{ book.introduction | safe }}
+        </p>
 
-{{ book.introduction | safe }}
-
-<ul class="toc">
-{% for chapter in range(1, book.chapters + 1) %}
-    <li><a href="/{{book.title | slug}}/{{chapter}}/">Chapter {{chapter}}</a></li>
-{% endfor %}
-</ul>
+        <ul class="toc list-unstyled">
+        {% for chapter in range(1, book.chapters + 1) %}
+            <li class="border border-light"><a href="/{{book.title | slug}}/{{chapter}}/" class="d-block p-2 text-center link-light">{{chapter}}</a></li>
+        {% endfor %}
+        </ul>
+    </article>
+</main>

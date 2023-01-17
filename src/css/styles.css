@@ -1,61 +1,62 @@
+/**
+ * General styles
+ */
+
 main {
     margin: 0 auto;
     padding: 0 20px;
 }
 html, body {
-    background-color: #0e0e0e;
-    color: #e8e8e8;
     font-size: 16pt;
+    margin: 0;
+    padding: 0;
 }
 a {
-    color: #e8e8e8;
+    text-decoration: none !important;
 }
+a:hover {
+    text-decoration: underline !important;
+}
+
+/**
+ * Table of Contents
+ */
 
 ul.toc {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, 1fr);
     gap: 5px;
 }
-ul.toc li {
-    margin: 0;
-    padding: 0;
-}
-ul.toc li a {
-    display: block;
-    text-align: center;
 
-    padding: 10px;
-
-    border: 1px solid #e8e8e8;
-}
-ul.toc li a:hover {
-    background-color: #e8e8e8;
-    color: #0e0e0e;
-}
+/**
+ * Page navigation controls
+ */
 
 .page-controls {
     display: grid;
-    grid-template-columns: 100px 800px 100px;
-    width: min-content;
-    margin: 0 auto;
+    grid-template-columns: min-content 1fr min-content;
 }
 .page-controls > a {
     background-color: rgba(255, 255, 255, 0.1);
-    font-size: 40pt;
-    text-decoration: none;
-    text-align: center;
     opacity: 0.5;
+    width: 10vw;
+    min-width: 50px;
+    max-width: 100px;
 }
 .page-controls > a:hover {
     opacity: 0.8;
 }
 .page-controls > a span {
-    position: fixed;
-    display: block;
-    width: 100px;
-    text-align: center;
+    width: 10vw;
+    min-width: 50px;
+    max-width: 100px;
     top: 50vh;
+}
+
+/**
+ * Highlighting verses
+ */
+.verse:target {
+    background-color: rgba(255, 255, 255, 0.1);
+    scroll-margin-top: 100px;
 }

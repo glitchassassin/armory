@@ -10,6 +10,8 @@ const splitParagraphs = (text) => text.split("¶").map(t => `<p>${t.trim()}</p>`
  */
 const parseItalics = (text) => text.replace(/\* ([^*]+) \*/g, '<em>$1</em>')
 
+const wrapVerse = (text, verse) => `<span class="verse" id="${verse}">${text}</span>`
+
 function cleanText(text) {
     const mappers = [
         splitParagraphs,
@@ -45,11 +47,14 @@ async function main() {
             chapters: interface.getBookChapterCount(version, book),
             introduction: interface.getBookIntroduction(version, book)
         }
-    ));
+    )).reduce((acc, book) => {
+        acc[book.slug] = book;
+        return acc;
+    }, {});
 
-    const chapterList = books.flatMap(({title, slug, chapters}) => {
+    const chapterList = Object.values(books).flatMap(({slug, chapters}) => {
         return new Array(chapters).fill(0).map((_, i) => ({
-            book: title,
+            book: slug,
             chapter: i + 1,
             slug: `${slug}${i + 1}/`
         }))
@@ -59,7 +64,7 @@ async function main() {
         book,
         chapter,
         slug,
-        content: cleanText(interface.getChapterText(version, book, chapter).map(v => v.content).join(" ")),
+        content: cleanText(interface.getChapterText(version, books[book].title, chapter).map(v => wrapVerse(v.content, v.verseNr)).join("\n")),
         prevChapter: chapterList[i - 1]?.slug,
         nextChapter: chapterList[i + 1]?.slug,
     }))

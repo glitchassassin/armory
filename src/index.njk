@@ -1,12 +1,17 @@
 ---
-layout: article
-eleventyComputed:
-    title: "Armory"
-    pageHeader: "Cambridge KJV"
+layout: base
+title: "Armory"
 ---
 
-<ul class="toc">
-{% for book in bible.books %}
-    <li><a href="/{{book.title | slug}}/">{{ book.title }}</a></li>
-{% endfor %}
-</ul>
+<main class="container">
+    <header>
+        <h1>Cambridge KJV</h1>
+    </header>
+    <article>
+        <ul class="toc list-unstyled">
+        {% for slug, book in bible.books %}
+            <li class="border border-light"><a href="{{slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
+        {% endfor %}
+        </ul>
+    </article>
+</main>
