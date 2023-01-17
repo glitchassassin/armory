@@ -12,7 +12,9 @@ module.exports = function(eleventyConfig) {
         dir: "_site/js",
       },
       plugins: [
-        nodeResolve(),
+        nodeResolve({
+          modulePaths: ["/app", "/workspaces/armory"],
+        }),
         json(),
         commonjs({
           include: /node_modules/,
