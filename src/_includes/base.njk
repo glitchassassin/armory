@@ -15,11 +15,15 @@ title: Armory
   <body>
     <header class="sticky-top container border-bottom p-1 bg-dark">
         <div class="row">
-            <div class="col"><a href="/" class="fs-4 link-light">Armory</a></div>
-            <div class="col"><input type="search" class="form-control" placeholder="Go to reference" /></div>
+            <div class="col"><a href="/" class="fs-4 link-light" id="home">Armory</a></div>
+            <div class="col">
+                <input type="search" class="form-control" placeholder="Go to reference" id="SearchForReference" />
+            </div>
             <div class="col text-end"><!-- <button type="button" class="btn btn-secondary"><i class="bi-search"></i> Search</button>--></div>
         </div>
     </header>
     {{ content | safe }}
+    {% rollup "src/js/search.js" %}
+    <script src="//unpkg.com/alpinejs" defer></script>
   </body>
 </html>

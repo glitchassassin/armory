@@ -23,5 +23,12 @@
     "chapter-and-verse": "^3.0.4",
     "node-sword-interface": "^1.0.8",
     "slugify": "^1.6.5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "eleventy-plugin-rollup": "^1.2.1",
+    "rollup": "^3.10.0"
   }
 }
