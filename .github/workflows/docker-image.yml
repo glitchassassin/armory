@@ -15,9 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: install dependencies
-      run: sudo apt-get update && \
-           sudo apt-get upgrade && \
-           sudo apt-get install --no-install-recommends -y build-essential nodejs npm libcurl4-gnutls-dev libicu-dev zlib1g-dev pkg-config cmake subversion
+      run: apt-get update && \
+           apt-get upgrade && \
+           apt-get install --no-install-recommends -y build-essential nodejs npm libcurl4-gnutls-dev libicu-dev zlib1g-dev pkg-config cmake subversion
     - name: install packages
       run: npm install
     - name: render Bible
