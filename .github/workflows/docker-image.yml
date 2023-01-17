@@ -14,15 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Cache APT Packages
-      # You may pin to the exact commit or the version.
-      # uses: awalsh128/cache-apt-pkgs-action@9b3b2b590c20bc969b78d74ec349254d1f24ee21
+    - name: apt install with cache
       uses: awalsh128/cache-apt-pkgs-action@v1.2.2
       with:
         # Space delimited list of packages to install.
         packages: build-essential nodejs npm libcurl4-gnutls-dev libicu-dev zlib1g-dev pkg-config cmake subversion
-    - name: install packages
-      run: npm install
+    - name: npm install with caching
+      uses: bahmutov/npm-install@v1.6.0
     - name: render Bible
       run: npm run generate:kjv
     - name: Build the site
