@@ -23,9 +23,14 @@ a:hover {
  */
 
 ul.toc {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 1fr);
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 5px;
+}
+ul.toc a {
+    min-width: 50px;
 }
 
 /**

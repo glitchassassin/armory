@@ -44,6 +44,7 @@ async function main() {
         {
             title: chapterAndVerse(book).book.name,
             slug: `/${slugify(chapterAndVerse(book).book.name, { lower: true })}/`,
+            testament: chapterAndVerse(book).book.testament,
             chapters: interface.getBookChapterCount(version, book),
             introduction: interface.getBookIntroduction(version, book)
         }

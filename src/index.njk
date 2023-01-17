@@ -8,9 +8,21 @@ title: "Armory"
         <h1>Cambridge KJV</h1>
     </header>
     <article>
+        <h2>Old Testament</h2>
         <ul class="toc list-unstyled">
         {% for slug, book in bible.books %}
+        {% if book.testament === "O" %}
             <li class="border border-light"><a href="{{slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
+        {% endif %}
+        {% endfor %}
+        </ul>
+        
+        <h2>New Testament</h2>
+        <ul class="toc list-unstyled">
+        {% for slug, book in bible.books %}
+        {% if book.testament === "N" %}
+            <li class="border border-light"><a href="{{slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
+        {% endif %}
         {% endfor %}
         </ul>
     </article>
