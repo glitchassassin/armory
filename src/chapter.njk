@@ -12,25 +12,31 @@ eleventyComputed:
     nextPage: "{{ chapter.nextChapter }}"
 ---
 
-<div class="page-controls container g-0 mt-3">
+
+
+<main class="container">
+    <header class="d-flex sticky-top bg-dark fw-bold p-2">
+        <a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a>
+        ⟫
+        <a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a>
+    </header>
+    <article class="">
+        {{ chapter.content | safe }}
+    </article>
+</main>
+
+<div class="page-controls position-fixed">
+    <div class="d-flex justify-content-between">
     {% if prevPage %}
-        <a href="{{ prevPage }}" class="prev link-light text-center fs-1"><span class="d-block text-center position-fixed">❬</span></a>
+        <a href="{{ prevPage }}" class="prev link-light text-center fs-1 p-3 p-5-lg">〈</a>
     {% else %}
         <span></span>
     {% endif %}
-    
-    <main>
-        <header>
-            <h1 class="mb-3"><a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a></h1>
-            <h2 class="mb-3"><a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a></h2>
-        </header>
-        <article class="">
-            {{ chapter.content | safe }}
-        </article>
-    </main>
+
     {% if nextPage %}
-    <a href="{{ nextPage }}" class="next link-light text-center fs-1"><span class="d-block text-center position-fixed">〉</span></a>
+        <a href="{{ nextPage }}" class="next link-light text-center fs-1 p-3 p-5-lg">〉</a>
     {% else %}
         <span></span>
     {% endif %}
+    </div>
 </div>

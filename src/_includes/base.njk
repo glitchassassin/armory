@@ -14,13 +14,12 @@ eleventyComputed:
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
   </head>
   <body>
-    <header class="sticky-top container p-1 bg-dark">
+    <header class="container p-1 bg-dark">
         <div class="row">
-            <div class="col"><a href="/" class="fs-4 link-light" id="home">Armory</a></div>
+            <div class="col"><a href="/" class="fs-4 link-light ps-2" id="home">Armory</a></div>
             <div class="col">
                 <input type="search" class="form-control" placeholder="Go to reference" id="SearchForReference" />
             </div>
-            <div class="col text-end"><!-- <button type="button" class="btn btn-secondary"><i class="bi-search"></i> Search</button>--></div>
         </div>
     </header>
     {{ content | safe }}

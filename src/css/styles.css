@@ -24,14 +24,8 @@
     font-style: italic;
 }
 
-main {
-    margin: 0 auto;
-    padding: 0 20px;
-}
 html, body {
     font-size: 16pt;
-    margin: 0;
-    padding: 0;
     font-family: "Merriweather", serif !important;
     font-weight: normal !important;
 }
@@ -62,23 +56,21 @@ ul.toc a {
  */
 
 .page-controls {
-    display: grid;
-    grid-template-columns: min-content 1fr min-content;
-}
-.page-controls > a {
-    opacity: 0.5;
-    width: 10vw;
-    min-width: 50px;
-    max-width: 100px;
-}
-.page-controls > a:hover {
-    opacity: 0.8;
-}
-.page-controls > a span {
-    width: 10vw;
-    min-width: 50px;
-    max-width: 100px;
+    position: fixed;
     top: 50vh;
+    width: 100vw;
+}
+.page-controls > div {
+    max-width: 1600px;
+    width: 100vw;
+    margin: 0 auto;
+}
+.page-controls a {
+    opacity: 0.5;
+}
+.page-controls a:hover {
+    text-decoration: none !important;
+    opacity: 0.8;
 }
 
 /**
