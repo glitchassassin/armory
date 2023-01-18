@@ -28,9 +28,7 @@ html, body {
     font-size: 16pt;
     font-family: "Merriweather", serif !important;
     font-weight: normal !important;
-}
-body {
-    height: 100vh;
+    overflow: hidden;
 }
 a {
     text-decoration: none !important;
@@ -67,11 +65,11 @@ ul.toc a {
 .page-controls {
     position: fixed;
     top: 50vh;
-    width: 100vw;
+    width: 100%;
 }
 .page-controls > div {
     max-width: 1600px;
-    width: 100vw;
+    width: 100%;
     margin: 0 auto;
 }
 .page-controls a {
