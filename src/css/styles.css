@@ -95,11 +95,11 @@ ul.toc a {
     opacity: 50%;
     position: absolute;
     left: 0;
+    scroll-margin-top: 100px;
 }
 .hide-verse-numbers .verse-no {
     display: none;
 }
 .verse:target {
     background-color: rgba(255, 255, 255, 0.1);
-    scroll-margin-top: 100px;
 }

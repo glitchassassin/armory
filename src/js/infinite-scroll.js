@@ -9,13 +9,15 @@ class InfiniteScrollSection {
     chapter = null;
     nextChapter = null;
     prevChapter = null;
+    title = null;
     content = null;
     observer = null;
-    constructor(chapter) {
+    constructor(chapter, content = null) {
         if (sections[chapter]) {
             return sections[chapter];
         }
         this.chapter = chapter;
+        this.content = content;
         sections[chapter] = this;
         this.render();
     }
@@ -23,23 +25,30 @@ class InfiniteScrollSection {
     async load() {
         if (!this.chapter) return;
         
-        const base = baseUrl();
+        if (!this.content) {
+            const base = baseUrl();
 
-        const res = await fetch(base + this.chapter);
-        const html = await res.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        this.content = doc.getElementById('content');
+            const res = await fetch(base + this.chapter);
+            const html = await res.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            this.title = doc.title;
+            this.content = doc.getElementById('content');
+        }
 
         this.nextChapter = this.content.getAttribute('data-next-chapter');
         this.prevChapter = this.content.getAttribute('data-prev-chapter');
+        this.title ??= document.title;
     }
 
     async render() {
-        if (!this.content) await this.load();
+        await this.load();
 
-        // if already rendered, do nothing
-        if (document.querySelector(`div[data-chapter="${this.chapter}"]`)) return;
+        // if already rendered, just setup adjacent chapters
+        if (document.querySelector(`div[data-chapter="${this.chapter}"]`)) {
+            new InfiniteScrollSection(this.nextChapter);
+            new InfiniteScrollSection(this.prevChapter);
+        }
         
         // insert content into dom before next chapter or after previous chapter
         const nextChapterDom = this.nextChapter && document.querySelector(`div[data-chapter="${this.nextChapter}"]`);
@@ -54,16 +63,30 @@ class InfiniteScrollSection {
         }
 
         // set up intersection observer
+        // If any of the chapter is visible, load the next/prev chapters
+        // if > 50% of the chapter is visible, update the URL
+
         this.observer = new IntersectionObserver((entries, observer) => {
             if (!entries.some(entry => entry.isIntersecting)) return;
             // create new previous/next chapters (automatically added to sections map)
+            if (entries.some(entry => entry.intersectionRatio === 1)) {
+                console.log('Setting URL to', baseUrl() + this.chapter, entries)
+                document.title = this.title;
+                history.replaceState(null, "", baseUrl() + this.chapter);
+            }
             new InfiniteScrollSection(this.nextChapter);
             new InfiniteScrollSection(this.prevChapter);
         }, {
+            threshold: [0, 1],
             root: document,
             rootMargin: '0px'
         });
-        this.observer.observe(this.content);
+
+
+        for (const intersector of this.content.querySelectorAll('div[data-intersection-trigger]')) {
+            console.log('intersection trigger', intersector)
+            this.observer.observe(intersector);
+        }
     }
 }
 
@@ -76,12 +99,10 @@ function initialize() {
     // would keep showing the previous chapter all the way to Genesis
     content.parentElement.scrollTo(0, 1);
 
-    const nextChapter = content.getAttribute('data-next-chapter');
-    const prevChapter = content.getAttribute('data-prev-chapter');
+    const chapter = content.getAttribute('data-chapter');
 
     // create new InfiniteScrollSection for each chapter (automatically added to sections map)
-    new InfiniteScrollSection(prevChapter);
-    new InfiniteScrollSection(nextChapter);
+    new InfiniteScrollSection(chapter, content);
 }
 
 initialize();
