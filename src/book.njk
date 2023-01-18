@@ -10,15 +10,11 @@ eleventyComputed:
     title: "Armory | {{ book.title }}"
     pageHeader: "{{ book.title }}"
 ---
-<main class="container">
+<main class="container mt-3">
     <header>
         <h1><a href="{{book.slug}}" class="link-light">{{ book.title }}</a></h1>
     </header>
     <article>
-        <p>
-            {{ book.introduction | safe }}
-        </p>
-
         <ul class="toc list-unstyled">
         {% for chapter in range(1, book.chapters + 1) %}
             <li class="border border-light"><a href="/{{book.title | slug}}/{{chapter}}/" class="d-block p-2 text-center link-light">{{chapter}}</a></li>

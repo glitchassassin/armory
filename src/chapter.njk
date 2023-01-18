@@ -12,7 +12,7 @@ eleventyComputed:
     nextPage: "{{ chapter.nextChapter }}"
 ---
 
-<div class="page-controls container g-0">
+<div class="page-controls container g-0 mt-3">
     {% if prevPage %}
         <a href="{{ prevPage }}" class="prev link-light text-center fs-1"><span class="d-block text-center position-fixed">❬</span></a>
     {% else %}
@@ -21,10 +21,10 @@ eleventyComputed:
     
     <main>
         <header>
-            <h1><a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a></h1>
-            <h2><a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a></h2>
+            <h1 class="mb-3"><a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a></h1>
+            <h2 class="mb-3"><a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a></h2>
         </header>
-        <article>
+        <article class="">
             {{ chapter.content | safe }}
         </article>
     </main>

@@ -4,24 +4,22 @@ const slugify = require('slugify');
 const NodeSwordInterface = require('node-sword-interface');
 const chapterAndVerse = require('chapter-and-verse');
 
-const splitParagraphs = (text) => text.split("¶").map(t => `<p>${t.trim()}</p>`).join("\n")
 /**
  * Replaces substrings liks `* word *` with `<em>word</em>`
  */
 const parseItalics = (text) => text.replace(/\* ([^*]+) \*/g, '<em>$1</em>')
 
-const wrapVerse = (text, verse) => `<span class="verse" id="${verse}">${text}</span>`
+const wrapVerse = (text, verse) => `<p class="verse"><span class="verse-no" id="${verse}">${verse}</span> ${text}</p>`
 
 function cleanText(text) {
     const mappers = [
-        splitParagraphs,
         parseItalics
     ]
     return mappers.reduce((text, fn) => fn(text), text)
 }
 
 async function main() {
-    const version = "KJVPCE";
+    const version = "KJV";
 
     // Reload Bible module
     try {
@@ -65,7 +63,7 @@ async function main() {
         book,
         chapter,
         slug,
-        content: cleanText(interface.getChapterText(version, books[book].title, chapter).map(v => wrapVerse(v.content, v.verseNr)).join("\n")),
+        content: interface.getChapterText(version, books[book].title, chapter).map(v => cleanText(wrapVerse(v.content, v.verseNr))).join("\n"),
         prevChapter: chapterList[i - 1]?.slug,
         nextChapter: chapterList[i + 1]?.slug,
     }))

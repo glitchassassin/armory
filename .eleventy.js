@@ -25,6 +25,7 @@ module.exports = function(eleventyConfig) {
   });
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
   eleventyConfig.addPassthroughCopy("src/css");
+  eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addWatchTarget("src/js/");
   return {
     pathPrefix: "/armory/",
