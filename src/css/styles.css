@@ -29,11 +29,20 @@ html, body {
     font-family: "Merriweather", serif !important;
     font-weight: normal !important;
 }
+body {
+    height: 100vh;
+}
 a {
     text-decoration: none !important;
 }
 a:hover {
     text-decoration: underline !important;
+}
+
+.site-wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
 }
 
 /**
