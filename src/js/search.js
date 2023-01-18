@@ -15,7 +15,7 @@ function search(e) {
     if (!result.success) return;
 
     const book = result.book.name;
-    const chapter = result.chapter;
+    const chapter = result.chapter ?? 1;
     const verse = result.from;
 
     const urlBase = document.querySelector('#home').href;
