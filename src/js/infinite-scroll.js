@@ -97,7 +97,7 @@ function initialize() {
     // Since we're scrolled down slightly, browser will remember our position
     // when we insert DOM elements before the current chapter. Otherwise, it
     // would keep showing the previous chapter all the way to Genesis
-    content.parentElement.scrollTo(0, 1);
+    content.parentElement.parentElement.scrollTo(0, 1);
 
     const chapter = content.getAttribute('data-chapter');
 
