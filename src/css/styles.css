@@ -40,7 +40,9 @@ a:hover {
 .site-wrapper {
     display: grid;
     grid-template-rows: auto 1fr;
-    height: 100vh;
+
+    height: 100vh; /* fallback */
+    height: calc(var(--vh, 1vh) * 100); /* see js/viewport-height.js */
 }
 
 /**
