@@ -1,5 +1,6 @@
 import chapterAndVerse from "chapter-and-verse";
 import slugify from "slugify";
+import baseUrl from "./base-url";
 
 /**
  * When the user presses the enter key, validate the user's query with chapter-and-verse
@@ -18,9 +19,7 @@ function search(e) {
     const chapter = result.chapter ?? 1;
     const verse = result.from;
 
-    const urlBase = document.querySelector('#home').href;
-
-    let url = `${urlBase}${slugify(book, {lower: true})}/${chapter}/`;
+    let url = `${baseUrl()}/${slugify(book, {lower: true})}/${chapter}/`;
     if (verse) url += `#${verse}`;
 
     window.location.href = url;

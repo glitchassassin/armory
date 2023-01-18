@@ -12,31 +12,17 @@ eleventyComputed:
     nextPage: "{{ chapter.nextChapter }}"
 ---
 
-
-
-<main class="container">
-    <header class="d-flex sticky-top bg-dark fw-bold p-2">
-        <a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a>
-        ⟫
-        <a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a>
-    </header>
-    <article class="">
-        {{ chapter.content | safe }}
-    </article>
-</main>
-
-<div class="page-controls position-fixed">
-    <div class="d-flex justify-content-between">
-    {% if prevPage %}
-        <a href="{{ prevPage }}" class="prev link-light text-center fs-1 p-3 p-5-lg">〈</a>
-    {% else %}
-        <span></span>
-    {% endif %}
-
-    {% if nextPage %}
-        <a href="{{ nextPage }}" class="next link-light text-center fs-1 p-3 p-5-lg">〉</a>
-    {% else %}
-        <span></span>
-    {% endif %}
-    </div>
+<div id="content" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
+    <main class="container">
+        <header class="d-flex sticky-top bg-dark fw-bold p-2">
+            <a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a>
+            ⟫
+            <a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a>
+        </header>
+        <article class="">
+            {{ chapter.content | safe }}
+        </article>
+    </main>
 </div>
+
+{% rollup "src/js/infinite-scroll.js" %}
