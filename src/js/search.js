@@ -9,7 +9,6 @@ import baseUrl from "./base-url";
  */
 function search(e) {
     if (e.key !== "Enter") return;
-    console.log(e);
     const query = e.target.value;
 
     const result = chapterAndVerse(query);

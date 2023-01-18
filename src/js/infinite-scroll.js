@@ -15,7 +15,6 @@ class InfiniteScrollSection {
         if (sections[chapter]) {
             return sections[chapter];
         }
-        console.log('New scroll section:', chapter)
         this.chapter = chapter;
         sections[chapter] = this;
         this.render();
@@ -39,8 +38,6 @@ class InfiniteScrollSection {
     async render() {
         if (!this.content) await this.load();
 
-        console.log('loaded', this.content, document.contains(this.content))
-
         // if already rendered, do nothing
         if (document.querySelector(`div[data-chapter="${this.chapter}"]`)) return;
         
@@ -58,7 +55,6 @@ class InfiniteScrollSection {
 
         // set up intersection observer
         this.observer = new IntersectionObserver((entries, observer) => {
-            console.log('Observer triggered', this.chapter, entries, observer);
             if (!entries.some(entry => entry.isIntersecting)) return;
             // create new previous/next chapters (automatically added to sections map)
             new InfiniteScrollSection(this.nextChapter);
