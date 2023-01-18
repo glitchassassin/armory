@@ -70,7 +70,6 @@ class InfiniteScrollSection {
             if (!entries.some(entry => entry.isIntersecting)) return;
             // create new previous/next chapters (automatically added to sections map)
             if (entries.some(entry => entry.intersectionRatio === 1)) {
-                console.log('Setting URL to', baseUrl() + this.chapter, entries)
                 document.title = this.title;
                 history.replaceState(null, "", baseUrl() + this.chapter);
             }
@@ -84,7 +83,6 @@ class InfiniteScrollSection {
 
 
         for (const intersector of this.content.querySelectorAll('div[data-intersection-trigger]')) {
-            console.log('intersection trigger', intersector)
             this.observer.observe(intersector);
         }
     }
