@@ -12,7 +12,7 @@ eleventyComputed:
     nextPage: "{{ chapter.nextChapter }}"
 ---
 
-<div style="min-height: 100vh;">
+<div style="">
     <div id="content" class="position-relative" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
         <div data-intersection-trigger class="pe-none position-absolute top-0 start-0 end-0" style="height: 50vh;"></div>
         <main class="container">

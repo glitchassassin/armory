@@ -48,6 +48,7 @@ class InfiniteScrollSection {
         if (document.querySelector(`div[data-chapter="${this.chapter}"]`)) {
             new InfiniteScrollSection(this.nextChapter);
             new InfiniteScrollSection(this.prevChapter);
+            return;
         }
         
         // insert content into dom before next chapter or after previous chapter
@@ -55,7 +56,10 @@ class InfiniteScrollSection {
         const prevChapterDom = this.prevChapter && document.querySelector(`div[data-chapter="${this.prevChapter}"]`);
 
         if (nextChapterDom) {
+            const scrollPos = nextChapterDom.parentNode.parentNode.scrollTop;
             nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
+            nextChapterDom.parentNode.parentNode.scrollTop = scrollPos + nextChapterDom.getBoundingClientRect().top
+            console.log(scrollPos, nextChapterDom.parentNode.parentNode.scrollTop)
         } else if (prevChapterDom) {
             prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
         } else {
@@ -89,17 +93,10 @@ class InfiniteScrollSection {
 }
 
 function initialize() {
-    // get adjacent chapters
     const content = document.getElementById('content');
-
-    // Since we're scrolled down slightly, browser will remember our position
-    // when we insert DOM elements before the current chapter. Otherwise, it
-    // would keep showing the previous chapter all the way to Genesis
-    content.parentElement.parentElement.scrollTo(0, 1);
-
     const chapter = content.getAttribute('data-chapter');
 
-    // create new InfiniteScrollSection for each chapter (automatically added to sections map)
+    // create new InfiniteScrollSection for initial chapter (automatically added to sections map)
     new InfiniteScrollSection(chapter, content);
 }
 
