@@ -12,21 +12,19 @@ eleventyComputed:
     nextPage: "{{ chapter.nextChapter }}"
 ---
 
-<div style="">
-    <div id="content" class="position-relative" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
+    <div id="content" class="position-relative d-flex" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
         <div data-intersection-trigger class="pe-none position-absolute top-0 start-0 end-0" style="height: 50vh;"></div>
         <main class="container">
             <header class="d-flex sticky-top bg-dark fw-bold p-2">
                 <a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a>
-                ⟫
+                &nbsp;⟫&nbsp;
                 <a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a>
             </header>
-            <article class="">
+            <article>
                 {{ chapter.content | safe }}
             </article>
         </main>
         <div data-intersection-trigger class="pe-none position-absolute bottom-0 start-0 end-0" style="height: 50vh;"></div>
     </div>
-</div>
 
 {% rollup "src/js/infinite-scroll.js" %}

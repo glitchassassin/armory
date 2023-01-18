@@ -46,8 +46,8 @@ class InfiniteScrollSection {
 
         // if already rendered, just setup adjacent chapters
         if (document.querySelector(`div[data-chapter="${this.chapter}"]`)) {
-            new InfiniteScrollSection(this.nextChapter);
-            new InfiniteScrollSection(this.prevChapter);
+            if (this.nextChapter) new InfiniteScrollSection(this.nextChapter);
+            if (this.prevChapter) new InfiniteScrollSection(this.prevChapter);
             return;
         }
         
@@ -56,10 +56,11 @@ class InfiniteScrollSection {
         const prevChapterDom = this.prevChapter && document.querySelector(`div[data-chapter="${this.prevChapter}"]`);
 
         if (nextChapterDom) {
-            const scrollPos = nextChapterDom.parentNode.parentNode.scrollTop;
+            const scrollElement = document.querySelector('.site-wrapper > div');
+            const scrollPos = scrollElement.scrollTop;
             nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
-            nextChapterDom.parentNode.parentNode.scrollTop = scrollPos + nextChapterDom.getBoundingClientRect().top
-            console.log(scrollPos, nextChapterDom.parentNode.parentNode.scrollTop)
+            scrollElement.scrollTop = scrollPos + this.content.getBoundingClientRect().height;
+            console.log(scrollPos, scrollElement.scrollTop, this.content.getBoundingClientRect().height, nextChapterDom.getBoundingClientRect().top)
         } else if (prevChapterDom) {
             prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
         } else {
@@ -77,8 +78,8 @@ class InfiniteScrollSection {
                 document.title = this.title;
                 history.replaceState(null, "", baseUrl() + this.chapter);
             }
-            new InfiniteScrollSection(this.nextChapter);
-            new InfiniteScrollSection(this.prevChapter);
+            if (this.nextChapter) new InfiniteScrollSection(this.nextChapter);
+            if (this.prevChapter) new InfiniteScrollSection(this.prevChapter);
         }, {
             threshold: [0, 1],
             root: document,
