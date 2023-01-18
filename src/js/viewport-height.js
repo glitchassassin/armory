@@ -5,6 +5,6 @@ function setVH() {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
-window.addEventListener('resize', setVH());
+window.addEventListener('resize', setVH);
 
 setVH();
