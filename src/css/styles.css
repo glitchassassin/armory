@@ -66,6 +66,7 @@ ul.toc a {
     position: fixed;
     top: 50vh;
     width: 100%;
+    pointer-events: none;
 }
 .page-controls > div {
     max-width: 1600px;
@@ -74,6 +75,7 @@ ul.toc a {
 }
 .page-controls a {
     opacity: 0.5;
+    pointer-events: all;
 }
 .page-controls a:hover {
     text-decoration: none !important;
