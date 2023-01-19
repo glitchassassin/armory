@@ -1,7 +1,6 @@
 ---
 layout: base
 meta:
-    description: "{{ bible.books[chapter.book].title }} {{ chapter.chapter }} | A beautiful minimal Bible reading experience."
     type: "chapter"
 pagination:
     data: bible.chapters
@@ -9,10 +8,12 @@ pagination:
     alias: chapter
 permalink: "{{ chapter.slug }}"
 eleventyComputed:
-    title: "Armory | {{ bible.books[chapter.book].title }} {{ chapter.chapter }}"
+    title: "Armorer | {{ bible.books[chapter.book].title }} {{ chapter.chapter }}"
     pageHeader: "Chapter {{ chapter.chapter }}"
     prevPage: "{{ chapter.prevChapter }}"
     nextPage: "{{ chapter.nextChapter }}"
+    meta:
+        description: "{{ bible.books[chapter.book].title }} {{ chapter.chapter }} | A beautiful minimal Bible reading experience."
 ---
 
     <div id="content" class="position-relative d-flex" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">

@@ -13,7 +13,7 @@ module.exports = function(eleventyConfig) {
       },
       plugins: [
         nodeResolve({
-          modulePaths: ["/app", "/workspaces/armory"],
+          modulePaths: ["/app", "/workspaces/armorer"],
         }),
         json(),
         commonjs({
@@ -30,7 +30,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
   eleventyConfig.addWatchTarget("src/js/");
   return {
-    pathPrefix: "/armory/",
+    pathPrefix: "/armorer/",
     dir: {
       input: "src",
       output: "_site"

@@ -1,9 +1,11 @@
 ---
 meta:
-  description: Armory is a minimal and beautiful KJV web reader
+  description: Armorer is a minimal and beautiful KJV web reader
   type: website
 eleventyComputed:
-    title: Armory
+  title: Armorer
+  meta:
+    image: "{{ site.base_url }}/img/armorer-social.png"
 ---
 
 <!doctype html>
@@ -15,6 +17,8 @@ eleventyComputed:
     <meta property="og:title" content="{{ title }}">
     <meta property="og:description" content="{{ meta.description }}">
     <meta property="og:type" content="{{ meta.type }}">
+    <meta property="og:url" content="{{ site.base_url }}{{ page.url }}">
+    <meta property="og:image" content="{{ meta.image }}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -38,7 +42,7 @@ eleventyComputed:
               <div class="col-auto">
                 <a href="/" class="fs-4 link-light p-2 text-decoration-none" id="home">
                   <img src="/img/book_white.png" height="45" style="vertical-align: sub;" /> 
-                  <span class="d-none d-sm-inline px-3">Armory</span>
+                  <span class="d-none d-sm-inline px-3">Armorer</span>
                 </a>
                 </div>
               <div class="col">

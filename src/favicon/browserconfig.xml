@@ -2,7 +2,7 @@
 <browserconfig>
     <msapplication>
         <tile>
-            <square150x150logo src="/armory/mstile-150x150.png"/>
+            <square150x150logo src="/armorer/mstile-150x150.png"/>
             <TileColor>#212529</TileColor>
         </tile>
     </msapplication>
