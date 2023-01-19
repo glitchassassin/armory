@@ -30,10 +30,14 @@ html, body {
     font-weight: normal !important;
     overflow: hidden;
 }
-a {
+
+/**
+ * Default link styles
+ */
+.site-wrapper > div a {
     text-decoration: none !important;
 }
-a:hover {
+.site-wrapper > div a:hover {
     text-decoration: underline !important;
 }
 
@@ -102,4 +106,12 @@ ul.toc a {
 }
 .verse:target {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    background-image: url('/img/book_white.png');
+    background-size: contain;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
 }
