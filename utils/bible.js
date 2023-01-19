@@ -8,12 +8,14 @@ const chapterAndVerse = require('chapter-and-verse');
  * Replaces substrings liks `* word *` with `<em>word</em>`
  */
 const parseItalics = (text) => text.replace(/\* ([^*]+) \*/g, '<em>$1</em>')
+const smallcapsLord = (text) => text.replace(/LORD/g, '<span style="font-variant-caps: small-caps">Lord</span>')
 
 const wrapVerse = (text, verse) => `<p class="verse"><span class="verse-no" id="${verse}">${verse}</span> ${text}</p>`
 
 function cleanText(text) {
     const mappers = [
-        parseItalics
+        parseItalics,
+        smallcapsLord
     ]
     return mappers.reduce((text, fn) => fn(text), text)
 }
