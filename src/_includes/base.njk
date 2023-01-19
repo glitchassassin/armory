@@ -34,9 +34,14 @@ eleventyComputed:
   <body>
     <div class="site-wrapper">
       <header class="container p-1 bg-dark">
-          <div class="row">
-              <div class="col-4"><a href="/" class="fs-4 link-light ps-2 text-decoration-none" id="home"><img src="/img/book_white.png" width="50" style="vertical-align: sub;" /> Armory</a></div>
-              <div class="col-8">
+          <div class="row g-0">
+              <div class="col-auto">
+                <a href="/" class="fs-4 link-light p-2 text-decoration-none" id="home">
+                  <img src="/img/book_white.png" height="45" style="vertical-align: sub;" /> 
+                  <span class="d-none d-sm-inline px-3">Armory</span>
+                </a>
+                </div>
+              <div class="col">
                   <input type="search" class="form-control" placeholder="Go to reference" id="SearchForReference" />
               </div>
           </div>
