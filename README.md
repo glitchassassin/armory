@@ -1,8 +1,8 @@
-# armorer
-
 <p align="center" width="100%">
     <img src="https://github.com/glitchassassin/armorer/raw/main/src/img/armorer_social.png" width="33%">
 </p>
+
+# [armorer](https://armorer.io/)
 
 Renders SWORD Bible modules as a performant, minimal, well-designed static web reader.
 
