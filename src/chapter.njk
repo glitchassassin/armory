@@ -18,10 +18,13 @@ eleventyComputed:
     <div id="content" class="position-relative d-flex" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
         <div data-intersection-trigger class="pe-none position-absolute top-0 start-0 end-0" style="height: 50vh;"></div>
         <main class="container">
-            <header class="d-flex sticky-top bg-dark fw-bold p-2">
-                <a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a>
-                &nbsp;⟫&nbsp;
-                <a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a>
+            <header class="sticky-top">
+                <!-- this nested div is a hack to fix 1px gap with sticky header -->
+                <div class="bg-dark fw-bold p-2 position-relative" style="top: -2px;">
+                    <a href="{{bible.books[chapter.book].slug}}" class="link-light">{{ bible.books[chapter.book].title }}</a>
+                    &nbsp;⟫&nbsp;
+                    <a href="{{chapter.slug}}" class="link-light">Chapter {{ chapter.chapter }}</a>
+                </div>
             </header>
             <article>
                 {{ chapter.content | safe }}
