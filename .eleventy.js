@@ -30,7 +30,6 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
   eleventyConfig.addWatchTarget("src/js/");
   return {
-    pathPrefix: "/armorer/",
     dir: {
       input: "src",
       output: "_site"
