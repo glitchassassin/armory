@@ -13,7 +13,7 @@ eleventyComputed:
     prevPage: "{{ chapter.prevChapter }}"
     nextPage: "{{ chapter.nextChapter }}"
     meta:
-        description: "{{ bible.books[chapter.book].title }} {{ chapter.chapter }} | A beautiful minimal Bible reading experience."
+        description: "A beautiful minimal Bible reading experience."
 ---
 
     <div id="content" class="position-relative d-flex" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
