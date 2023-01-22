@@ -45,26 +45,22 @@ class InfiniteScrollSection {
         await this.load();
 
         // if already rendered, just setup adjacent chapters
-        if (document.querySelector(`div[data-chapter="${this.chapter}"]`)) {
-            if (this.nextChapter) new InfiniteScrollSection(this.nextChapter);
-            if (this.prevChapter) new InfiniteScrollSection(this.prevChapter);
-            return;
-        }
-        
-        // insert content into dom before next chapter or after previous chapter
-        const nextChapterDom = this.nextChapter && document.querySelector(`div[data-chapter="${this.nextChapter}"]`);
-        const prevChapterDom = this.prevChapter && document.querySelector(`div[data-chapter="${this.prevChapter}"]`);
+        if (!document.querySelector(`div[data-chapter="${this.chapter}"]`)) {
+            // insert content into dom before next chapter or after previous chapter
+            const nextChapterDom = this.nextChapter && document.querySelector(`div[data-chapter="${this.nextChapter}"]`);
+            const prevChapterDom = this.prevChapter && document.querySelector(`div[data-chapter="${this.prevChapter}"]`);
 
-        if (nextChapterDom) {
-            const scrollElement = document.querySelector('#site-content');
-            const scrollPos = scrollElement.scrollTop;
-            nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
-            scrollElement.scrollTop = scrollPos + this.content.getBoundingClientRect().height;
-            console.log(this.chapter, scrollPos, scrollElement.scrollTop);
-        } else if (prevChapterDom) {
-            prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
-        } else {
-            console.error('Could not find insert position for chapter', this.chapter, 'between', this.nextChapter, 'and', this.prevChapter)
+            if (nextChapterDom) {
+                const scrollElement = document.querySelector('#site-content');
+                const scrollPos = scrollElement.scrollTop;
+                nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
+                scrollElement.scrollTop = scrollPos + this.content.getBoundingClientRect().height;
+                console.log(this.chapter, scrollPos, scrollElement.scrollTop);
+            } else if (prevChapterDom) {
+                prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
+            } else {
+                console.error('Could not find insert position for chapter', this.chapter, 'between', this.nextChapter, 'and', this.prevChapter)
+            }
         }
 
         // set up intersection observer
