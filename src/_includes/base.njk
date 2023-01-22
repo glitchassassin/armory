@@ -51,7 +51,7 @@ eleventyComputed:
                   <input 
                     type="search" 
                     class="form-control" 
-                    placeholder="Go to reference" 
+                    placeholder="Search/Go to..." 
                     @keyup.enter="GoToReference(query)"
                     @keydown="setPage(0)"
                     x-model.debounce="query" 
@@ -62,45 +62,11 @@ eleventyComputed:
       <div id="site-content" class="overflow-auto" x-show="!query.length">
         {{ content | safe }}
       </div>
-      <div id="search-results" class="overflow-auto container" x-show="query.length" x-cloak x-transition>
-          <div class="my-3" x-effect="referenceResults = getReferenceResults(query);">
-            <h3 class="text-center">References</h3>
-            <p x-show="referenceResults.length === 0" class="text-muted">
-              No results found
-            </p>
-            <div class="list-group">
-              <template x-for="reference in referenceResults">
-                <a x-bind:href="reference.url" x-text="reference.title" class="list-group-item list-group-item-action"></a>
-              </template>
-            </div>
-          </div>
-          <div class="my-3" x-effect="await getSearchResults(query);">
-            <h3 class="text-center">Search Results</h3>
-            <p x-show="searchPending && searchResults.length === 0" class="text-muted">
-              Searching...
-            </p>
-            <div x-show="!searchPending || searchResults.length > 0">
-              <p x-show="searchResults.length === 0" class="text-muted">
-                No results found
-              </p>
-              {% include "pagination.njk" %}
-              <ul class="list-group mb-3">
-                <template x-for="result in searchResults">
-                  <li class="list-group-item list-group-item-action">
-                    <a x-bind:href="result.url" x-text="result.title" class="stretched-link"></a>
-                    <p x-text="result.content" class="text-muted"></p>
-                  </li>
-                </template>
-              </ul>
-              {% include "pagination.njk" %}
-            </div>
-          </div>
-      </div>
-    </div>
+      {% include "search/search_results.njk" %}
     <script>
       var SearchWorkerPath = "{% rollup "src/js/search-worker.js" %}";
     </script>
-    <script src="{% rollup "src/js/search.js" %}" type="module"></script>
+    <script src="{% rollup "src/js/searchContext.js" %}" type="module"></script>
     <script src="{% rollup "src/js/viewport-height.js" %}" type="module"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
   </body>
