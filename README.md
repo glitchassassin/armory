@@ -6,15 +6,14 @@
 
 Renders SWORD Bible modules as a performant, minimal, well-designed static web reader.
 
-## Planned Features
+## Major Features
 
 - [x] Infinite scroll
+    - Automatically loads previous & next chapter on demand, updating URL in the browser, as the reader scrolls.
 - [x] Navigate to references intuitively
-    - [x] Enter reference as text
-    - [ ] Save history in local storage
-- [ ] Search by keyword
-    - [ ] Search indexes on client side?
-    - [ ] Save history in local storage
+    - Enter reference as text, or navigate via concise table-of-content views per book.
+- [x] Search by keyword
+    - Search indexes are loaded and executed in a web worker on client side for fast, efficient results
 
 ## URL Scheme
 
