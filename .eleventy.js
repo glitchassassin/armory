@@ -2,9 +2,14 @@ const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
 const { default: nodeResolve } = require("@rollup/plugin-node-resolve");
 const rollupPlugin = require("eleventy-plugin-rollup");
 const commonjs = require("@rollup/plugin-commonjs");
-const { default: json } = require("@rollup/plugin-json");
+const json = require("@rollup/plugin-json");
+const terser = require("@rollup/plugin-terser");
+const CleanCSS = require('clean-css');
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.addFilter("cssmin", function(code) {
+    return new CleanCSS({}).minify(code).styles;
+  });
   eleventyConfig.addPlugin(rollupPlugin, {
     scriptGenerator: (filename) => filename, // do not add <script> tags
     rollupOptions: {
@@ -21,6 +26,7 @@ module.exports = function(eleventyConfig) {
           include: /node_modules/,
           requireReturnsDefault: 'auto', // <---- this solves default issue
         }),
+        terser(),
       ]
     },
   });
