@@ -20,14 +20,18 @@
   "homepage": "https://github.com/glitchassassin/armorer#readme",
   "dependencies": {
     "@11ty/eleventy": "^2.0.0-canary.29",
-    "chapter-and-verse": "^3.0.4",
+    "chapter-and-verse": "github:glitchassassin/chapter-and-verse#remove-lodash",
+    "clean-css": "^5.3.2",
+    "js-search": "^2.0.0",
     "node-sword-interface": "^1.0.8",
+    "porter-stemmer": "^0.9.1",
     "slugify": "^1.6.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.3.0",
     "eleventy-plugin-rollup": "^1.2.1",
     "rollup": "^3.10.0"
   }

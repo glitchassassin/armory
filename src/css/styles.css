@@ -5,23 +5,27 @@
     font-family: "Merriweather";
     src: url('../fonts/Merriweather-Regular.ttf');
     font-weight: normal;
+    font-display: swap;
 }
 @font-face {
     font-family: "Merriweather";
     src: url('../fonts/Merriweather-Italic.ttf');
     font-weight: normal;
     font-style: italic;
+    font-display: swap;
 }
 @font-face {
     font-family: "Merriweather";
     src: url('../fonts/Merriweather-Bold.ttf');
     font-weight: bold;
+    font-display: swap;
 }
 @font-face {
     font-family: "Merriweather";
     src: url('../fonts/Merriweather-BoldItalic.ttf');
     font-weight: bold;
     font-style: italic;
+    font-display: swap;
 }
 
 html, body {
@@ -34,14 +38,14 @@ html, body {
 /**
  * Default link styles
  */
-.site-wrapper > div a {
+#site-wrapper > div a {
     text-decoration: none !important;
 }
-.site-wrapper > div a:hover {
+#site-wrapper > div a:hover {
     text-decoration: underline !important;
 }
 
-.site-wrapper {
+#site-wrapper {
     display: grid;
     grid-template-rows: auto 1fr;
 
