@@ -33,19 +33,17 @@ eleventyComputed:
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
       [x-cloak] { display: none !important; }
     </style>
-    <link rel="prefetch" href="{% rollup "src/js/search-worker.js" %}" />
   </head>
   <body>
     <div id="site-wrapper" x-data="searchContext">
       <header class="container p-1 bg-dark">
           <div class="row g-0">
               <div class="col-auto">
-                <a href="/" class="fs-4 link-light p-2 text-decoration-none" id="home">
-                  <img src="/img/book_white.png" height="45" style="vertical-align: sub;" /> 
+                <a href="/" class="fs-4 link-light p-2 text-decoration-none" id="home" aria-label="Armorer">
+                  <img src="/img/book_white.png" height="45" width="45" style="vertical-align: sub;" alt="Armorer" /> 
                   <span class="d-none d-sm-inline px-3">Armorer</span>
                 </a>
                 </div>
@@ -102,7 +100,6 @@ eleventyComputed:
     <script>
       var SearchWorkerPath = "{% rollup "src/js/search-worker.js" %}";
     </script>
-    <script src="/js/chapterAndVerse.js"></script>
     <script src="{% rollup "src/js/search.js" %}" type="module"></script>
     <script src="{% rollup "src/js/viewport-height.js" %}" type="module"></script>
     <script src="//unpkg.com/alpinejs" defer></script>

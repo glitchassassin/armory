@@ -28,7 +28,6 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/img");
   eleventyConfig.addPassthroughCopy("src/fonts");
-  eleventyConfig.addPassthroughCopy({ "node_modules/chapter-and-verse/chapterAndVerse.js": "js/chapterAndVerse.js" });
   eleventyConfig.addPassthroughCopy("src/js/*.json");
   eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
   eleventyConfig.addWatchTarget("src/js/");

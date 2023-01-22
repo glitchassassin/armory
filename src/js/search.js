@@ -1,5 +1,6 @@
 import slugify from "./slugify";
 import baseUrl from "./base-url";
+import chapterAndVerse from 'chapter-and-verse';
 
 const searchWorker = new Worker(SearchWorkerPath, { type: "module" });
 
