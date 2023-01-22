@@ -34,14 +34,14 @@ html, body {
 /**
  * Default link styles
  */
-.site-wrapper > div a {
+#site-wrapper > div a {
     text-decoration: none !important;
 }
-.site-wrapper > div a:hover {
+#site-wrapper > div a:hover {
     text-decoration: underline !important;
 }
 
-.site-wrapper {
+#site-wrapper {
     display: grid;
     grid-template-rows: auto 1fr;
 

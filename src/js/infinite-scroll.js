@@ -56,11 +56,10 @@ class InfiniteScrollSection {
         const prevChapterDom = this.prevChapter && document.querySelector(`div[data-chapter="${this.prevChapter}"]`);
 
         if (nextChapterDom) {
-            const scrollElement = document.querySelector('.site-wrapper > div');
+            const scrollElement = document.querySelector('#site-content');
             const scrollPos = scrollElement.scrollTop;
             nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
             scrollElement.scrollTop = scrollPos + this.content.getBoundingClientRect().height;
-            console.log(scrollPos, scrollElement.scrollTop, this.content.getBoundingClientRect().height, nextChapterDom.getBoundingClientRect().top)
         } else if (prevChapterDom) {
             prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
         } else {
