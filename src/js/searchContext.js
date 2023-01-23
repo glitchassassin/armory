@@ -1,6 +1,7 @@
 import slugify from "./slugify";
 import baseUrl from "./base-url";
 import chapterAndVerse from 'chapter-and-verse';
+import Alpine from 'alpinejs';
 
 const searchWorker = new Worker(SearchWorkerPath, { type: "module" });
 
@@ -113,3 +114,7 @@ document.addEventListener('alpine:init', () => {
         }
     }))
 })
+
+window.Alpine = Alpine
+ 
+Alpine.start()

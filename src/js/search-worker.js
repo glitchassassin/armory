@@ -16,8 +16,6 @@ const searchIndex = fetch(`./verses.json`)
         return search;
     });
 
-searchIndex.then(() => console.log("Search index loaded"));
-
 /**
  * Given a query and some pagination parameters, search with Fuse
  * and return the matching results

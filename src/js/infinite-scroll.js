@@ -55,7 +55,6 @@ class InfiniteScrollSection {
                 const scrollPos = scrollElement.scrollTop;
                 nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
                 scrollElement.scrollTop = scrollPos + this.content.getBoundingClientRect().height;
-                console.log(this.chapter, scrollPos, scrollElement.scrollTop);
             } else if (prevChapterDom) {
                 prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
             } else {
