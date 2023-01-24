@@ -100,10 +100,14 @@ document.addEventListener('alpine:init', () => {
         nextPage() {
             // cap at last page
             this.paginationCurrentPage = Math.min(this.paginationTotalPages, this.paginationCurrentPage + 1)
+            this.getReferenceResults(this.query);
+            this.getSearchResults(this.query);
         },
         prevPage() {
             // cap at first page
             this.paginationCurrentPage = Math.max(0, this.paginationCurrentPage - 1)
+            this.getReferenceResults(this.query);
+            this.getSearchResults(this.query);
         },
         setPage(page) {
             // cap within bounds
@@ -111,6 +115,8 @@ document.addEventListener('alpine:init', () => {
                 this.paginationTotalPages, 
                 Math.max(0, page)
             )
+            this.getReferenceResults(this.query);
+            this.getSearchResults(this.query);
         }
     }))
 })
