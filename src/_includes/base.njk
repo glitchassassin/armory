@@ -59,9 +59,10 @@ eleventyComputed:
                     type="search" 
                     class="form-control" 
                     placeholder="Search/Go to..." 
-                    @keyup.enter="GoToReference(query)"
+                    @keyup.enter="GoToReference($event.target.value)"
                     @keydown="setPage(0)"
-                    x-model.debounce="query" 
+                    @input.debounce="getReferenceResults(query); await getSearchResults(query);"
+                    x-model="query" 
                   />
               </div>
           </div>

@@ -48,7 +48,7 @@ function getReferenceResults(query) {
 
     if (query.length) searchResults.push({ url: '/genesis/1/#1', title: 'Genesis 1:1', content: 'In the beginning God created the heaven and the earth' })
 
-    return referenceResults
+    this.referenceResults = referenceResults;
 }
 
 /**
