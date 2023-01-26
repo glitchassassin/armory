@@ -59,15 +59,12 @@ eleventyComputed:
                     type="search" 
                     class="form-control" 
                     placeholder="Search/Go to..." 
-                    @keyup.enter="GoToReference($event.target.value)"
-                    @keydown="setPage(0)"
-                    @input.debounce="getReferenceResults(query); await getSearchResults(query);"
-                    x-model="query" 
+                    data-search-input
                   />
               </div>
           </div>
       </header>
-      <div id="site-content" class="overflow-auto" x-show="!query.length">
+      <div id="site-content" class="overflow-auto">
         {{ content | safe }}
       </div>
       {% include "search/search_results.njk" %}

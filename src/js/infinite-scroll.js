@@ -5,95 +5,80 @@ import baseUrl from "./base-url";
  */
 const sections = {};
 
-class InfiniteScrollSection {
-    chapter = null;
-    nextChapter = null;
-    prevChapter = null;
-    title = null;
-    content = null;
-    observer = null;
-    constructor(chapter, content = null) {
-        if (sections[chapter]) {
-            return sections[chapter];
+async function loadDataIfNeeded(chapter) {
+    const content = document.querySelector(`[data-chapter="${chapter}"]`);
+    if (content) return {
+        content,
+        title: document.title
+    };
+
+    const base = baseUrl();
+    const res = await fetch(base + chapter);
+    const html = await res.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    return {
+        content: doc.getElementById('content'),
+        title: doc.title,
+    }
+}
+
+async function loadChapter(chapter) {
+    if (sections[chapter]) return;
+
+    // load content
+    const { content, title } = await loadDataIfNeeded(chapter);
+
+    const { nextChapter, prevChapter } = content.dataset;
+
+    // insert content into dom before next chapter or after previous chapter
+    if (!document.querySelector(`div[data-chapter="${chapter}"]`)) {
+        // insert content into dom before next chapter or after previous chapter
+        const nextChapterDom = nextChapter && document.querySelector(`div[data-chapter="${nextChapter}"]`);
+        const prevChapterDom = prevChapter && document.querySelector(`div[data-chapter="${prevChapter}"]`);
+
+        if (nextChapterDom) {
+            const scrollElement = document.querySelector('#site-content');
+            const scrollPos = scrollElement.scrollTop;
+            nextChapterDom.parentNode.insertBefore(content, nextChapterDom);
+            scrollElement.scrollTop = scrollPos + content.getBoundingClientRect().height;
+        } else if (prevChapterDom) {
+            prevChapterDom.parentNode.insertBefore(content, prevChapterDom.nextSibling);
+        } else {
+            console.error('Could not find insert position for chapter', chapter, 'between', nextChapter, 'and', prevChapter)
         }
-        this.chapter = chapter;
-        this.content = content;
-        sections[chapter] = this;
-        this.render();
     }
 
-    async load() {
-        if (!this.chapter) return;
-        
-        if (!this.content) {
-            const base = baseUrl();
-
-            const res = await fetch(base + this.chapter);
-            const html = await res.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            this.title = doc.title;
-            this.content = doc.getElementById('content');
+    // set up intersection triggers
+    const observer = new IntersectionObserver((entries) => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        // create new previous/next chapters (automatically added to sections map)
+        if (entries.some(entry => entry.intersectionRatio === 1)) {
+            document.title = title;
+            history.replaceState(null, "", baseUrl() + chapter);
         }
+        if (nextChapter) loadChapter(nextChapter);
+        if (prevChapter) loadChapter(prevChapter);
+    }, {
+        threshold: [0, 1],
+        root: document,
+        rootMargin: '0px'
+    });
 
-        this.nextChapter = this.content.getAttribute('data-next-chapter');
-        this.prevChapter = this.content.getAttribute('data-prev-chapter');
-        this.title ??= document.title;
+
+    for (const intersector of content.querySelectorAll('[data-intersection-trigger]')) {
+        observer.observe(intersector);
     }
 
-    async render() {
-        await this.load();
-
-        // if already rendered, just setup adjacent chapters
-        if (!document.querySelector(`div[data-chapter="${this.chapter}"]`)) {
-            // insert content into dom before next chapter or after previous chapter
-            const nextChapterDom = this.nextChapter && document.querySelector(`div[data-chapter="${this.nextChapter}"]`);
-            const prevChapterDom = this.prevChapter && document.querySelector(`div[data-chapter="${this.prevChapter}"]`);
-
-            if (nextChapterDom) {
-                const scrollElement = document.querySelector('#site-content');
-                const scrollPos = scrollElement.scrollTop;
-                nextChapterDom.parentNode.insertBefore(this.content, nextChapterDom);
-                scrollElement.scrollTop = scrollPos + this.content.getBoundingClientRect().height;
-            } else if (prevChapterDom) {
-                prevChapterDom.parentNode.insertBefore(this.content, prevChapterDom.nextSibling);
-            } else {
-                console.error('Could not find insert position for chapter', this.chapter, 'between', this.nextChapter, 'and', this.prevChapter)
-            }
-        }
-
-        // set up intersection observer
-        // If any of the chapter is visible, load the next/prev chapters
-        // if > 50% of the chapter is visible, update the URL
-
-        this.observer = new IntersectionObserver((entries, observer) => {
-            if (!entries.some(entry => entry.isIntersecting)) return;
-            // create new previous/next chapters (automatically added to sections map)
-            if (entries.some(entry => entry.intersectionRatio === 1)) {
-                document.title = this.title;
-                history.replaceState(null, "", baseUrl() + this.chapter);
-            }
-            if (this.nextChapter) new InfiniteScrollSection(this.nextChapter);
-            if (this.prevChapter) new InfiniteScrollSection(this.prevChapter);
-        }, {
-            threshold: [0, 1],
-            root: document,
-            rootMargin: '0px'
-        });
-
-
-        for (const intersector of this.content.querySelectorAll('div[data-intersection-trigger]')) {
-            this.observer.observe(intersector);
-        }
-    }
+    // record as set up
+    sections[chapter] = observer;
 }
 
 function initialize() {
     const content = document.getElementById('content');
     const chapter = content.getAttribute('data-chapter');
 
-    // create new InfiniteScrollSection for initial chapter (automatically added to sections map)
-    new InfiniteScrollSection(chapter, content);
+    loadChapter(chapter);
 }
 
 window.addEventListener('load', initialize);
