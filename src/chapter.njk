@@ -16,8 +16,7 @@ eleventyComputed:
         description: "A beautiful minimal Bible reading experience."
 ---
 
-<div id="content" class="position-relative d-flex" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
-    <div data-intersection-trigger class="pe-none position-absolute top-0 start-0 end-0" style="height: 50vh;"></div>
+<infinite-scroll-section id="content" data-title="{{ title }}" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
     <main class="container">
         <header class="sticky-top">
             <!-- this nested div is a hack to fix 1px gap with sticky header -->
@@ -31,7 +30,6 @@ eleventyComputed:
             {{ chapter.content | safe }}
         </article>
     </main>
-    <div data-intersection-trigger class="pe-none position-absolute bottom-0 start-0 end-0" style="height: 50vh;"></div>
-</div>
+</infinite-scroll-section>
 
-{% rollup "src/js/infinite-scroll.js" %}
+{% include "components/infinite-scroll.html" %}

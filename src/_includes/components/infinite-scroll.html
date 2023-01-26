@@ -1,0 +1,104 @@
+<script>
+    const sections = {};
+
+    /**
+     * InfiniteScrollSection
+     * 
+     * Example:
+     * <infinite-scroll-section 
+     *      data-title="Matthew 1" 
+     *      data-chapter="/matthew/1/" 
+     *      data-next-chapter="/matthew/2/" 
+     *      data-prev-chapter="/malachi/4/" 
+     * >
+     *   content goes here
+     * </infinite-scroll-section>
+     */
+    class InfiniteScrollSection extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        disconnectedCallback() {
+            if (this.dataset.chapter) {
+                this.observer.disconnect();
+            }
+        }
+
+        initialized = false;
+        connectedCallback() {if (this.initialized || !this.isConnected || !this.dataset.chapter) return;
+
+            const baseStyles = "height: 50vh; left: 0; right: 0; position: absolute; pointerEvents: none;";
+
+            // Create the actual trigger divs
+            this.top = document.createElement("div");
+            this.top.style.cssText = baseStyles;
+            this.top.style.top = 0;
+            this.bottom = document.createElement("div");
+            this.bottom.style.cssText = baseStyles;
+            this.bottom.style.bottom = 0;
+
+            const wrapper = document.createElement("div");
+            wrapper.style.position = "relative";
+            wrapper.style.display = "flex";
+
+            wrapper.appendChild(this.top);            
+            for (const child of this.children) {
+                wrapper.appendChild(child);
+            }
+            wrapper.appendChild(this.bottom);
+
+            this.append(wrapper);
+
+            this.observer = new IntersectionObserver((entries) => {
+                if (!entries.some(entry => entry.isIntersecting)) return;
+                // create new previous/next chapters (automatically added to sections map)
+                if (entries.some(entry => entry.intersectionRatio === 1)) {
+                    document.title = this.dataset.title;
+                    history.replaceState(null, "", this.dataset.chapter);
+                }
+                // load the chapter if we don't already have a load pending
+                if (this.dataset.nextChapter) sections[this.dataset.nextChapter] ??= this.loadChapter(this.dataset.nextChapter);
+                if (this.dataset.prevChapter) sections[this.dataset.prevChapter] ??= this.loadChapter(this.dataset.prevChapter);
+            }, {
+                threshold: [0, 1],
+                root: document,
+                rootMargin: '0px'
+            });
+            this.observer.observe(this.top)
+            this.observer.observe(this.bottom)
+
+            this.initialized = true;
+        }
+
+        async loadDataIfNeeded(chapter) {
+            const res = await fetch(chapter);
+            const html = await res.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const content = doc.querySelector(`[data-chapter="${chapter}"`);
+            return content;
+        }
+
+        async loadChapter(chapter) {
+            const content = document.querySelector(`[data-chapter="${chapter}"]`) ?? await this.loadDataIfNeeded(chapter)
+
+            // insert content into dom before next chapter or after previous chapter
+
+            if (chapter === this.dataset.prevChapter) {
+                const scrollElement = this.parentElement;
+                const scrollPos = scrollElement.scrollTop;
+                this.before(content);
+                scrollElement.scrollTop = scrollPos + content.getBoundingClientRect().height;
+            } else if (chapter === this.dataset.nextChapter) {
+                this.after(content);
+            } else {
+                console.error('Could not find insert position for chapter', this.dataset.chapter, 'between', this.dataset.nextChapter, 'and', this.dataset.prevChapter)
+            }
+
+            return content;
+        }
+    }
+
+    customElements.define("infinite-scroll-section", InfiniteScrollSection);
+</script>
