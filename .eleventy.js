@@ -11,7 +11,27 @@ module.exports = function(eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
   eleventyConfig.addPlugin(rollupPlugin, {
+    rollupOptions: {
+      output: {
+        format: "es",
+        dir: "_site/js",
+      },
+      plugins: [
+        nodeResolve({
+          modulePaths: ["/app", "/workspaces/armorer"],
+        }),
+        json(),
+        commonjs({
+          include: /node_modules/,
+          requireReturnsDefault: 'auto', // <---- this solves default issue
+        }),
+        terser(),
+      ]
+    },
+  });
+  eleventyConfig.addPlugin(rollupPlugin, {
     scriptGenerator: (filename) => filename, // do not add <script> tags
+    shortcode: "rollup_web_worker",
     rollupOptions: {
       output: {
         format: "es",

@@ -72,9 +72,9 @@ eleventyComputed:
       </div>
       {% include "search/search_results.njk" %}
     <script>
-      var SearchWorkerPath = "{% rollup "src/js/search-worker.js" %}";
+      var SearchWorkerPath = "{% rollup_web_worker "src/js/search-worker.js" %}";
     </script>
-    <script src="{% rollup "src/js/searchContext.js" %}" type="module"></script>
-    <script src="{% rollup "src/js/viewport-height.js" %}" type="module"></script>
+    {% rollup "src/js/searchContext.js" %}
+    {% rollup "src/js/viewport-height.js" %}
   </body>
 </html>
