@@ -10,14 +10,18 @@ const VERSION = "KJV";
  * Replaces substrings liks `* word *` with `<em>word</em>`
  */
 const parseItalics = (text) => text.replace(/\* ([^*]+) \*/g, '<em>$1</em>')
+const stripTitles = (text) => text.replace(/<title.*?<\/title>/g, '')
 const smallcapsLord = (text) => text.replace(/LORD/g, '<span style="font-variant-caps: small-caps">Lord</span>')
+const trim = (text) => text.trim()
 
-const wrapVerse = (text, verse) => `<p class="verse"><span class="verse-no" id="${verse}">${verse}</span> ${text}</p>`
+const wrapVerse = (text, verse) => `<p class="verse" data-verse="${verse}"><span class="verse-no" id="${verse}">${verse}</span> ${text}</p>`
 
 function cleanText(text) {
     const mappers = [
         parseItalics,
-        smallcapsLord
+        stripTitles,
+        smallcapsLord,
+        trim
     ]
     return mappers.reduce((text, fn) => fn(text), text)
 }
@@ -54,7 +58,7 @@ async function main() {
         return acc;
     }, {});
 
-    const chapterList = Object.values(books).flatMap(({slug, chapters}) => {
+    const chapterList = Object.values(books).flatMap(({ slug, chapters }) => {
         return new Array(chapters).fill(0).map((_, i) => ({
             book: slug,
             chapter: i + 1,
@@ -62,7 +66,7 @@ async function main() {
         }))
     });
 
-    const chapters = chapterList.map(({book, chapter, slug}, i) => ({
+    const chapters = chapterList.map(({ book, chapter, slug }, i) => ({
         book,
         chapter,
         slug,

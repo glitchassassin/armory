@@ -16,7 +16,7 @@ eleventyComputed:
         description: "A beautiful minimal Bible reading experience."
 ---
 
-<div id="content" class="position-relative d-flex" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
+<div id="content" class="position-relative d-flex" data-book="{{ chapter.book }}" data-chapter="{{ chapter.slug }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
     <div data-intersection-trigger class="pe-none position-absolute top-0 start-0 end-0" style="height: 50vh;"></div>
     <main class="container">
         <header class="sticky-top">
@@ -35,3 +35,4 @@ eleventyComputed:
 </div>
 
 {% rollup "src/js/infinite-scroll.js" %}
+{% rollup "src/js/copy-paste.js" %}
