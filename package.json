@@ -20,6 +20,7 @@
   "homepage": "https://github.com/glitchassassin/armorer#readme",
   "dependencies": {
     "@11ty/eleventy": "^2.0.0-canary.29",
+    "@alpinejs/intersect": "^3.11.1",
     "alpinejs": "^3.11.1",
     "chapter-and-verse": "github:glitchassassin/chapter-and-verse#remove-lodash",
     "clean-css": "^5.3.2",

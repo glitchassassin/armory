@@ -1,7 +1,6 @@
 import slugify from "./slugify";
 import baseUrl from "./base-url";
 import chapterAndVerse from 'chapter-and-verse';
-import Alpine from 'alpinejs';
 
 const searchWorker = new Worker(SearchWorkerPath, { type: "module" });
 
@@ -10,7 +9,7 @@ const searchWorker = new Worker(SearchWorkerPath, { type: "module" });
  * @param {string} query
  * @returns {Array<{title: string, url: string}>}
  */
-function getReferenceResults(query) {
+export function getReferenceResults(query) {
     const result = chapterAndVerse(query);
     const referenceResults = [];
     const searchResults = [];
@@ -37,7 +36,7 @@ function getReferenceResults(query) {
  * @param {string} query
  * @returns {Array<{title: string, content: string, url: string}>}
  */
-async function getSearchResults(query) {
+export async function getSearchResults(query) {
     if (query.length < 3) return [];
 
     this.searchPending = true;
@@ -64,63 +63,3 @@ async function getSearchResults(query) {
     this.paginationPageList = Array.from({ length: paginationEnd - paginationStart }, (_, i) => i + paginationStart);
     this.searchPending = false;
 }
-
-document.addEventListener('alpine:init', () => {
-    Alpine.data('searchContext', () => ({
-        getReferenceResults,
-        getSearchResults,
-        /**
-         * When the user presses the enter key, validate the user's query with chapter-and-verse
-         * and then redirect to the appropriate page.
-         * @param {KeyEvent} e 
-         */
-        GoToReference(query) {
-            const result = chapterAndVerse(query);
-            if (!result.success) return;
-
-            const book = result.book.name;
-            const chapter = result.chapter ?? 1;
-            const verse = result.from;
-
-            let url = `${baseUrl()}/${slugify(book, { lower: true })}/${chapter}/`;
-            if (verse) url += `#${verse}`;
-
-            this.query = '';
-
-            window.location.href = url;
-        },
-        query: '',
-        referenceResults: [],
-        searchResults: [],
-        searchPending: false,
-        paginationCurrentPage: 0,
-        paginationCount: 20,
-        paginationTotalPages: 0,
-        paginationPageList: [0],
-        nextPage() {
-            // cap at last page
-            this.paginationCurrentPage = Math.min(this.paginationTotalPages, this.paginationCurrentPage + 1)
-            this.getReferenceResults(this.query);
-            this.getSearchResults(this.query);
-        },
-        prevPage() {
-            // cap at first page
-            this.paginationCurrentPage = Math.max(0, this.paginationCurrentPage - 1)
-            this.getReferenceResults(this.query);
-            this.getSearchResults(this.query);
-        },
-        setPage(page) {
-            // cap within bounds
-            this.paginationCurrentPage = Math.min(
-                this.paginationTotalPages,
-                Math.max(0, page)
-            )
-            this.getReferenceResults(this.query);
-            this.getSearchResults(this.query);
-        }
-    }))
-})
-
-window.Alpine = Alpine
-
-Alpine.start()
