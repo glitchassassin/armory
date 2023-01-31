@@ -45,33 +45,55 @@ eleventyComputed:
     </style>
   </head>
   <body>
-    <div id="site-wrapper" x-data="searchContext">
-      <header class="container p-1 bg-dark">
-          <div class="row g-0">
-              <div class="col-auto">
-                <a href="/" class="fs-4 link-light p-2 text-decoration-none" id="home" aria-label="Armorer">
-                  <img src="/img/book_white.png" height="45" width="45" style="vertical-align: sub;" alt="Armorer" /> 
-                  <span class="d-none d-sm-inline px-3">Armorer</span>
-                </a>
+    <div id="site-wrapper">
+      <search-context>
+        <header class="container p-1 bg-dark">
+            <div class="row g-0">
+                <div class="col-auto">
+                  <a href="/" class="fs-4 link-light p-2 text-decoration-none" id="home" aria-label="Armorer">
+                    <img src="/img/book_white.png" height="45" width="45" style="vertical-align: sub;" alt="Armorer" /> 
+                    <span class="d-none d-sm-inline px-3">Armorer</span>
+                  </a>
                 </div>
-              <div class="col">
-                  <input 
-                    type="search" 
-                    class="form-control" 
-                    placeholder="Search/Go to..." 
-                    data-search-input
-                  />
-              </div>
+                <div class="col">
+                    <input type="search" class="form-control" placeholder="Search/Go to..." data-search-input />
+                </div>
+            </div>
+        </header>
+        <div id="site-content" class="overflow-auto" data-hide="searching">
+          {{ content | safe }}
+        </div>
+
+        <div id="search_results" class="overflow-auto container d-none" data-show="searching">
+          <div class="my-3">
+              <h3 class="text-center">References</h3>
+              <p class="text-muted d-none" data-show="noReferenceResultsFound">
+                  No results found
+              </p>
+              <reference-results data-bind="referenceResults:results"></reference-results>
           </div>
-      </header>
-      <div id="site-content" class="overflow-auto">
-        {{ content | safe }}
-      </div>
-      {% include "search/search_results.njk" %}
+          <div class="my-3">
+            <h3 class="text-center">Search Results</h3>
+            <p class="text-muted" data-show="searchResultsLoading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                &nbsp;Searching...
+            </p>
+            <div data-show="searchResultsLoaded">
+                <p class="text-muted d-none" data-show="noSearchResultsFound">
+                    No results found
+                </p>
+                <search-pagination data-bind="paginationStart,paginationEnd,currentPage"></search-pagination>
+                <search-results data-bind="searchResults:results"></searchResults>
+                <search-pagination data-bind="paginationStart,paginationEnd,currentPage"></search-pagination>
+            </div>
+          </div>
+        </div>
+      </search-context>
+    </div>
     <script>
       var SearchWorkerPath = "{% rollup_web_worker "src/js/search-worker.js" %}";
     </script>
-    {% rollup "src/js/searchContext.js" %}
+    {% rollup "src/js/search-components.js" %}
     {% rollup "src/js/viewport-height.js" %}
   </body>
 </html>
