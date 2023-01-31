@@ -6,25 +6,6 @@ import Alpine from 'alpinejs';
 const searchWorker = new Worker(SearchWorkerPath, { type: "module" });
 
 /**
- * When the user presses the enter key, validate the user's query with chapter-and-verse
- * and then redirect to the appropriate page.
- * @param {KeyEvent} e 
- */
-function GoToReference(query) {
-    const result = chapterAndVerse(query);
-    if (!result.success) return;
-
-    const book = result.book.name;
-    const chapter = result.chapter ?? 1;
-    const verse = result.from;
-
-    let url = `${baseUrl()}/${slugify(book, {lower: true})}/${chapter}/`;
-    if (verse) url += `#${verse}`;
-
-    window.location.href = url;
-}
-
-/**
  * Validate the user's query with chapter-and-verse and then return matching references
  * @param {string} query
  * @returns {Array<{title: string, url: string}>}
@@ -39,7 +20,7 @@ function getReferenceResults(query) {
         const chapter = result.chapter ?? 1;
         const verse = result.from;
 
-        let url = `${baseUrl()}/${slugify(book, {lower: true})}/${chapter}/`;
+        let url = `${baseUrl()}/${slugify(book, { lower: true })}/${chapter}/`;
         referenceResults.push({ title: `${book} ${chapter}`, url });
         if (verse) {
             referenceResults.unshift({ title: `${book} ${chapter}:${verse}`, url: url + `#${verse}` });
@@ -88,7 +69,26 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('searchContext', () => ({
         getReferenceResults,
         getSearchResults,
-        GoToReference,
+        /**
+         * When the user presses the enter key, validate the user's query with chapter-and-verse
+         * and then redirect to the appropriate page.
+         * @param {KeyEvent} e 
+         */
+        GoToReference(query) {
+            const result = chapterAndVerse(query);
+            if (!result.success) return;
+
+            const book = result.book.name;
+            const chapter = result.chapter ?? 1;
+            const verse = result.from;
+
+            let url = `${baseUrl()}/${slugify(book, { lower: true })}/${chapter}/`;
+            if (verse) url += `#${verse}`;
+
+            this.query = '';
+
+            window.location.href = url;
+        },
         query: '',
         referenceResults: [],
         searchResults: [],
@@ -112,7 +112,7 @@ document.addEventListener('alpine:init', () => {
         setPage(page) {
             // cap within bounds
             this.paginationCurrentPage = Math.min(
-                this.paginationTotalPages, 
+                this.paginationTotalPages,
                 Math.max(0, page)
             )
             this.getReferenceResults(this.query);
@@ -122,5 +122,5 @@ document.addEventListener('alpine:init', () => {
 })
 
 window.Alpine = Alpine
- 
+
 Alpine.start()
