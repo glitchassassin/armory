@@ -22,32 +22,47 @@ function mergeReferences(from, to) {
 function initializeCopyPaste() {
     document.addEventListener('copy', (event) => {
         const selection = document.getSelection();
-        if (!selection.anchorNode.parentElement.closest('.verse')) return; // only deal with copying verses
 
-        const fromBook = selection.anchorNode.parentElement.closest('[data-book]').dataset.book.replace(/[^a-z]/gi, '');
-        const fromChapter = selection.anchorNode.parentElement.closest('[data-chapter]').dataset.chapter.replace(/[^\d]/g, '');
-        const fromVerse = selection.anchorNode.parentElement.closest('[data-verse]').dataset.verse;
-        const toBook = selection.focusNode.parentElement.closest('[data-book]').dataset.book.replace(/[^a-z]/gi, '');
-        const toChapter = selection.focusNode.parentElement.closest('[data-chapter]').dataset.chapter.replace(/[^\d]/g, '');
-        const toVerse = selection.focusNode.parentElement.closest('[data-verse]').dataset.verse;
-
-        const reference = mergeReferences(`${fromBook} ${fromChapter}:${fromVerse}`, `${toBook} ${toChapter}:${toVerse}`);
+        // check if anchorNode is in a chapter
+        if (!selection.anchorNode.parentElement.closest('[data-chapter]')) return;
 
         // get just the verse text
-        const contents = selection.getRangeAt(0).cloneContents()
         const text = [];
-        const verses = contents.querySelectorAll('.verse')
+        let reference;
+        for (let range = 0; range < selection.rangeCount; range++) {
+            const contents = selection.getRangeAt(range).cloneContents()
 
-        // strip out verse numbers
-        verses.forEach(v => {
-            v.querySelectorAll('.verse-no').forEach(e => e.remove())
-            text.push(v.textContent.trim());
-        })
+            const fromNode = selection.getRangeAt(range).startContainer;
+            const fromElement = fromNode.nodeType === Node.TEXT_NODE ? fromNode.parentElement : fromNode;
+            const fromBook = fromElement.closest('[data-book]').dataset.book.replace(/[^a-z]/gi, '');
+            const fromChapter = fromElement.closest('[data-chapter]').dataset.chapter.replace(/[^\d]/g, '');
+            const fromVerse = fromElement.closest('[data-verse]').dataset.verse;
+            const toNode = selection.getRangeAt(range).endContainer;
+            const toElement = toNode.nodeType === Node.TEXT_NODE ? toNode.parentElement : toNode;
+            const toBook = toElement.closest('[data-book]').dataset.book.replace(/[^a-z]/gi, '');
+            const toChapter = toElement.closest('[data-chapter]').dataset.chapter.replace(/[^\d]/g, '');
+            const toVerse = toElement.closest('[data-verse]').dataset.verse;
+
+            reference ??= `${fromBook} ${fromChapter}:${fromVerse}`
+            reference = mergeReferences(reference, `${toBook} ${toChapter}:${toVerse}`);
+
+            const verses = contents.querySelectorAll('.verse');
+            if (verses.length !== 0) {
+                // strip out verse numbers
+                verses.forEach(v => {
+                    v.querySelectorAll('.verse-no').forEach(e => e.remove())
+                    text.push(v.textContent.trim());
+                })
+            } else {
+                // partial verse without verse numbers
+                text.push(contents.textContent.trim());
+            }
+        }
 
         if (reference) text.push(reference);
 
         // update the clipboard
-        event.clipboardData.setData('text/plain', text.join("\n"));
+        event.clipboardData.setData('text/plain', text.filter(t => t !== "").join("\n"));
         event.preventDefault();
     });
 }
