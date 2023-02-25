@@ -7,6 +7,7 @@
     font-weight: normal;
     font-display: swap;
 }
+
 @font-face {
     font-family: "Merriweather";
     src: url('/fonts/Merriweather-Italic.ttf');
@@ -14,12 +15,14 @@
     font-style: italic;
     font-display: swap;
 }
+
 @font-face {
     font-family: "Merriweather";
     src: url('/fonts/Merriweather-Bold.ttf');
     font-weight: bold;
     font-display: swap;
 }
+
 @font-face {
     font-family: "Merriweather";
     src: url('/fonts/Merriweather-BoldItalic.ttf');
@@ -28,7 +31,8 @@
     font-display: swap;
 }
 
-html, body {
+html,
+body {
     font-size: 16pt;
     font-family: "Merriweather", serif !important;
     font-weight: normal !important;
@@ -38,10 +42,11 @@ html, body {
 /**
  * Default link styles
  */
-#site-wrapper > div a {
+#site-wrapper>div a {
     text-decoration: none !important;
 }
-#site-wrapper > div a:hover {
+
+#site-wrapper>div a:hover {
     text-decoration: underline !important;
 }
 
@@ -49,8 +54,10 @@ html, body {
     display: grid;
     grid-template-rows: auto 1fr;
 
-    height: 100vh; /* fallback */
-    height: calc(var(--vh, 1vh) * 100); /* see js/viewport-height.js */
+    height: 100vh;
+    /* fallback */
+    height: calc(var(--vh, 1vh) * 100);
+    /* see js/viewport-height.js */
 }
 
 /**
@@ -64,6 +71,7 @@ ul.toc {
     flex-wrap: wrap;
     gap: 5px;
 }
+
 ul.toc a {
     min-width: 50px;
 }
@@ -78,15 +86,18 @@ ul.toc a {
     width: 100%;
     pointer-events: none;
 }
-.page-controls > div {
+
+.page-controls>div {
     max-width: 1600px;
     width: 100%;
     margin: 0 auto;
 }
+
 .page-controls a {
     opacity: 0.5;
     pointer-events: all;
 }
+
 .page-controls a:hover {
     text-decoration: none !important;
     opacity: 0.8;
@@ -99,18 +110,21 @@ ul.toc a {
     position: relative;
     padding-left: 2em;
 }
+
 .verse-no {
     position: absolute;
     left: 0;
     scroll-margin-top: 100px;
-    -webkit-user-select: none!important;
-    -moz-user-select: none!important;
-    user-select: none!important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    user-select: none !important;
     color: var(--bs-dark-text);
 }
+
 .hide-verse-numbers .verse-no {
     display: none;
 }
+
 .verse:target {
     background-color: rgba(255, 255, 255, 0.1);
 }

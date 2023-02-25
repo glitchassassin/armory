@@ -22,18 +22,18 @@ title: "Armorer"
         <div class="mb-3">
             <h2 class="text-center">Old Testament</h2>
             <ul class="toc list-unstyled mb-5">
-            {% for slug, book in bible.books %}
+            {% for bookTitle, book in bible.books %}
             {% if book.testament === "O" %}
-                <li class="border border-light"><a href="{{slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
+                <li class="border border-light"><a href="{{book.slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
             {% endif %}
             {% endfor %}
             </ul>
             
             <h2 class="text-center">New Testament</h2>
             <ul class="toc list-unstyled">
-            {% for slug, book in bible.books %}
+            {% for bookTitle, book in bible.books %}
             {% if book.testament === "N" %}
-                <li class="border border-light"><a href="{{slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
+                <li class="border border-light"><a href="{{book.slug}}" class="d-block p-2 text-center link-light">{{book.title}}</a></li>
             {% endif %}
             {% endfor %}
             </ul>

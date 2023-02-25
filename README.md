@@ -4,7 +4,7 @@
 
 # [armorer](https://armorer.io/)
 
-Renders SWORD Bible modules as a performant, minimal, well-designed static web reader.
+Renders the King James Version of the Bible as a performant, minimal, well-designed static web reader.
 
 ## Major Features
 

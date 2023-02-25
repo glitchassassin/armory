@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const slugify = require('slugify');
-const NodeSwordInterface = require('node-sword-interface');
+const verses = require('kjv/json/verses-1769.json')
 const chapterAndVerse = require('chapter-and-verse');
 
 const VERSION = "KJV";
@@ -9,8 +9,8 @@ const VERSION = "KJV";
 /**
  * Replaces substrings liks `* word *` with `<em>word</em>`
  */
-const parseItalics = (text) => text.replace(/\* ([^*]+) \*/g, '<em>$1</em>')
-const stripTitles = (text) => text.replace(/<title.*?<\/title>/g, '')
+const parseItalics = (text) => text.replace(/\[(.+?)\]/g, '<em>$1</em>')
+const parseParagraphs = (text) => text.replace(/# ?/g, '')
 const smallcapsLord = (text) => text.replace(/LORD/g, '<span style="font-variant-caps: small-caps">Lord</span>')
 const trim = (text) => text.trim()
 
@@ -18,8 +18,8 @@ const wrapVerse = (text, verse) => `<p class="verse" data-verse="${verse}"><span
 
 function cleanText(text) {
     const mappers = [
+        parseParagraphs,
         parseItalics,
-        stripTitles,
         smallcapsLord,
         trim
     ]
@@ -27,53 +27,29 @@ function cleanText(text) {
 }
 
 async function main() {
-
-    // Reload Bible module
-    try {
-        fs.mkdirSync(path.join(__dirname, "../.sword"));
-    } catch (e) { }
-    const interface = new NodeSwordInterface(path.join(__dirname, "../.sword"));
-    interface.refreshLocalModules();
-    if (!interface.getLocalModule(VERSION)) {
-        // await interface.uninstallModule(version);
-        console.log("Updating repository")
-        await interface.updateRepositoryConfig();
-        console.log("Downloading Bible version")
-        await interface.installModule(VERSION);
-    }
-    console.log("Bible loaded")
-
     // Generate JSON object
-
-    const books = interface.getBookList(VERSION).map(book => (
-        {
-            title: chapterAndVerse(book).book.name,
-            slug: `/${slugify(chapterAndVerse(book).book.name, { lower: true })}/`,
-            testament: chapterAndVerse(book).book.testament,
-            chapters: interface.getBookChapterCount(VERSION, book),
-            introduction: interface.getBookIntroduction(VERSION, book)
+    const books = {}
+    for (const reference in verses) {
+        const parsedReference = chapterAndVerse(reference.replace(/Solomon's Song/g, 'Song of Solomon'));
+        const book = parsedReference.book.name;
+        books[book] ??= {
+            title: book,
+            slug: `/${slugify(book, { lower: true })}/`,
+            testament: parsedReference.book.testament,
+            chapters: {},
         }
-    )).reduce((acc, book) => {
-        acc[book.slug] = book;
-        return acc;
-    }, {});
+        books[book].chapters[parsedReference.chapter] ??= {};
+        books[book].chapters[parsedReference.chapter][parsedReference.from] = cleanText(wrapVerse(verses[reference], parsedReference.from));
+    }
 
-    const chapterList = Object.values(books).flatMap(({ slug, chapters }) => {
-        return new Array(chapters).fill(0).map((_, i) => ({
-            book: slug,
-            chapter: i + 1,
-            slug: `${slug}${i + 1}/`
-        }))
-    });
-
-    const chapters = chapterList.map(({ book, chapter, slug }, i) => ({
+    const chapters = Object.entries(books).map(([book, { chapters, slug: bookSlug }]) => Object.entries(chapters).map(([chapter, verses]) => ({
         book,
         chapter,
-        slug,
-        content: interface.getChapterText(VERSION, books[book].title, chapter).map(v => cleanText(wrapVerse(v.content, v.verseNr))).join("\n"),
-        prevChapter: chapterList[i - 1]?.slug,
-        nextChapter: chapterList[i + 1]?.slug,
-    }))
+        slug: `${bookSlug}${chapter}/`,
+        content: Object.values(verses).join("\n"),
+        nextChapter: chapters[parseInt(chapter) + 1] ? `${bookSlug}${parseInt(chapter) + 1}/` : undefined,
+        prevChapter: chapters[parseInt(chapter) - 1] ? `${bookSlug}${parseInt(chapter) - 1}/` : undefined,
+    }))).flat();
 
     const output = JSON.stringify({
         books,
@@ -86,23 +62,19 @@ async function main() {
     console.log("Output rendered")
 
     // generate indexes 
-    generateIndexes(interface);
+    generateIndexes();
 }
 
 /**
  * Generates indexes
- * @param {NodeSwordInterface} interface 
  */
-function generateIndexes(interface) {
-    const verses = interface.getBibleText(VERSION).map(v => {
-        const book = chapterAndVerse(v.bibleBookShortTitle).book.name
-        return {
-            title: `${book} ${v.chapter}:${v.verseNr}`,
-            content: v.content.replace(/<title.*?<\/title>/g, '').replace(/<.+?>/g, '').trim(),
-        }
-    });
-    const verseMap = verses.reduce((acc, v) => {
-        acc[v.title] = v.content;
+function generateIndexes() {
+    const verseMap = Object.entries(verses).reduce((acc, [title, content]) => {
+        const parsedReference = chapterAndVerse(title.replace(/Solomon's Song/g, 'Song of Solomon'));
+        const book = parsedReference.book.name;
+        const chapter = parsedReference.chapter;
+        const verse = parsedReference.from;
+        acc[`${book} ${chapter}:${verse}`] = cleanText(content);
         return acc;
     }, {});
 

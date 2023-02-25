@@ -27,7 +27,7 @@
                 <template x-for="result in searchResults">
                     <li class="list-group-item list-group-item-action">
                         <a x-bind:href="result.url" x-text="result.title" class="stretched-link" @click="query = ''"></a>
-                        <p x-text="result.content" class="text-muted"></p>
+                        <p x-html="result.content" class="text-muted"></p>
                     </li>
                 </template>
             </ul>

@@ -16,8 +16,8 @@ eleventyComputed:
     </header>
     <article>
         <ul class="toc list-unstyled">
-        {% for chapter in range(1, book.chapters + 1) %}
-            <li class="border border-light"><a href="/{{book.title | slug}}/{{chapter}}/" class="d-block p-2 text-center link-light">{{chapter}}</a></li>
+        {% for chapterNumber, chapter in book.chapters %}
+            <li class="border border-light"><a href="{{book.slug}}{{chapterNumber}}/" class="d-block p-2 text-center link-light">{{chapterNumber}}</a></li>
         {% endfor %}
         </ul>
     </article>
