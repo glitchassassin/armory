@@ -4,9 +4,9 @@
     <ul class="pagination justify-content-center">
         <li class="page-item">
             <button 
-            :class="{'page-link': true, 'disabled': paginationCurrentPage === 0}" 
+            :class="{'page-link': true, 'disabled': paginationCurrentPage === 1}" 
             @click="prevPage" 
-            :disabled="paginationCurrentPage === 0"
+            :disabled="paginationCurrentPage === 1"
             aria-label="Previous"
         >
             <span aria-hidden="true">&laquo;</span>
@@ -17,12 +17,12 @@
                 <button 
             class="page-link" 
             @click="setPage(page)" 
-            x-text="page + 1"></button>
+            x-text="page"></button>
             </li>
         </template>
         <li class="page-item">
             <button 
-            :class="{'page-link': true, 'disabled': paginationCurrentPage + 1 === paginationTotalPages}" 
+            :class="{'page-link': true, 'disabled': paginationCurrentPage === paginationTotalPages}" 
             @click="nextPage" 
             :disabled="paginationCurrentPage === paginationTotalPages"
             aria-label="Next"

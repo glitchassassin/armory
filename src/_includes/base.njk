@@ -45,7 +45,11 @@ eleventyComputed:
     </style>
   </head>
   <body>
-    <div id="site-wrapper" x-data="searchContext">
+    <div 
+      id="site-wrapper" 
+      x-data="searchContext"
+      x-init="if (query) { getReferenceResults(query); getSearchResults(query); }"
+    >
       <header class="container p-1 bg-dark">
           <div class="row g-0">
               <div class="col-auto">
@@ -61,7 +65,11 @@ eleventyComputed:
                     placeholder="Search/Go to..." 
                     @keyup.enter="GoToReference($event.target.value)"
                     @keydown="setPage(0)"
-                    @input.debounce="getReferenceResults(query); await getSearchResults(query);"
+                    @input.debounce="
+                      setLocationQuery(query);
+                      getReferenceResults(query); 
+                      await getSearchResults(query);
+                    "
                     x-model="query" 
                   />
               </div>

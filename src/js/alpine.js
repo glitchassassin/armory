@@ -33,24 +33,37 @@ document.addEventListener('alpine:init', () => {
 
             window.location.href = url;
         },
-        query: '',
+        query: new URLSearchParams(window.location.search).get('q') ?? '',
+        setLocationQuery(query, page=1) {
+            const url = new URL(window.location);
+            if (query.length) {
+                url.searchParams.set('q', query);
+                url.searchParams.set('p', page);
+            } else {
+                url.searchParams.delete('q');
+                url.searchParams.delete('p');
+            }
+            history.pushState(null, document.title, url);
+        },
         referenceResults: [],
         searchResults: [],
         searchResultsQueryTime: undefined,
         searchPending: false,
-        paginationCurrentPage: 0,
+        paginationCurrentPage: 1 * (new URLSearchParams(window.location.search).get('p') ?? 1),
         paginationCount: 20,
         paginationTotalPages: 0,
-        paginationPageList: [0],
+        paginationPageList: [1],
         nextPage() {
             // cap at last page
             this.paginationCurrentPage = Math.min(this.paginationTotalPages, this.paginationCurrentPage + 1)
+            this.setLocationQuery(this.query, this.paginationCurrentPage);
             this.getReferenceResults(this.query);
             this.getSearchResults(this.query);
         },
         prevPage() {
             // cap at first page
-            this.paginationCurrentPage = Math.max(0, this.paginationCurrentPage - 1)
+            this.paginationCurrentPage = Math.max(1, this.paginationCurrentPage - 1)
+            this.setLocationQuery(this.query, this.paginationCurrentPage);
             this.getReferenceResults(this.query);
             this.getSearchResults(this.query);
         },
@@ -58,8 +71,9 @@ document.addEventListener('alpine:init', () => {
             // cap within bounds
             this.paginationCurrentPage = Math.min(
                 this.paginationTotalPages,
-                Math.max(0, page)
+                Math.max(1, page)
             )
+            this.setLocationQuery(this.query, this.paginationCurrentPage);
             this.getReferenceResults(this.query);
             this.getSearchResults(this.query);
         }

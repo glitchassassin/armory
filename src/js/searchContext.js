@@ -41,7 +41,7 @@ export async function getSearchResults(query) {
 
     this.searchPending = true;
 
-    const start = this.paginationCurrentPage * this.paginationCount;
+    const start = (this.paginationCurrentPage - 1) * this.paginationCount;
     const count = this.paginationCount;
     const queryTime = Date.now();
 
@@ -62,8 +62,9 @@ export async function getSearchResults(query) {
     this.searchResultsKey = queryTime;
     this.paginationTotalPages = Math.ceil(resultCount / this.paginationCount);
     // display up to 10 pages in pagination list
-    const paginationStart = Math.max(0, this.paginationCurrentPage - 2);
-    const paginationEnd = Math.min(this.paginationTotalPages, this.paginationCurrentPage + 3);
-    this.paginationPageList = Array.from({ length: paginationEnd - paginationStart }, (_, i) => i + paginationStart);
+    const paginationStart = Math.max(1, this.paginationCurrentPage - 2);
+    const paginationEnd = Math.min(this.paginationTotalPages, this.paginationCurrentPage + 2);
+    this.paginationPageList = Array.from({ length: paginationEnd - paginationStart + 1 }, (_, i) => i + paginationStart);
+    console.log(paginationStart, paginationEnd, this.paginationPageList)
     this.searchPending = false;
 }
