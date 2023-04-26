@@ -49,7 +49,12 @@ eleventyComputed:
       id="site-wrapper" 
       x-data="searchContext"
       x-init="if (query) { getReferenceResults(query); getSearchResults(query); }"
-      @popstate.window="query = new URLSearchParams(window.location.search).get('q') ?? ''; getReferenceResults(query); getSearchResults(query);"
+      @popstate.window="
+        query = new URLSearchParams(window.location.search).get('q') ?? ''; 
+        paginationCurrentPage = 1 * (new URLSearchParams(window.location.search).get('p') ?? 1);
+        getReferenceResults(query); 
+        getSearchResults(query);
+      "
     >
       <header class="container p-1 bg-dark">
           <div class="row g-0">
