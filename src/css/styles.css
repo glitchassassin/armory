@@ -136,3 +136,23 @@ ul.toc a {
     height: 100px;
     display: inline-block;
 }
+
+body * {
+    scrollbar-color: var(--bs-border-color) var(--bs-dark-bg);
+    scrollbar-width: thin;
+}
+
+body *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+body *::-webkit-scrollbar-track {
+    background: var(--bs-dark-bg);
+}
+
+body *::-webkit-scrollbar-thumb {
+    background-color: var(--bs-border-color);
+    border-radius: 2px;
+    border: 1px solid var(--bs-dark-bg);
+}
