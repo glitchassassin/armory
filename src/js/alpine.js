@@ -36,6 +36,7 @@ document.addEventListener('alpine:init', () => {
         query: '',
         referenceResults: [],
         searchResults: [],
+        searchResultsQueryTime: undefined,
         searchPending: false,
         paginationCurrentPage: 0,
         paginationCount: 20,

@@ -43,19 +43,23 @@ export async function getSearchResults(query) {
 
     const start = this.paginationCurrentPage * this.paginationCount;
     const count = this.paginationCount;
+    const queryTime = Date.now();
 
     const { results, resultCount } = await (new Promise((resolve, reject) => {
         try {
             searchWorker.onmessage = (e) => {
-                resolve(e.data);
+                if (e.data?.key === queryTime) resolve(e.data);
             }
-            searchWorker.postMessage({ query, start, count });
+            searchWorker.postMessage({ query, start, count, key: queryTime });
         } catch (e) {
             reject(e);
         }
     }));
 
+    if (this.searchResultsQueryTime > queryTime) return; // ignore stale results
+
     this.searchResults = results;
+    this.searchResultsKey = queryTime;
     this.paginationTotalPages = Math.ceil(resultCount / this.paginationCount);
     // display up to 10 pages in pagination list
     const paginationStart = Math.max(0, this.paginationCurrentPage - 2);

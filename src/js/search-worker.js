@@ -18,12 +18,14 @@ const searchIndex = fetch(`./verses.json`)
 
 /**
  * Given a query and some pagination parameters, search with Fuse
- * and return the matching results
+ * and return the matching results. `key` is passed through to match
+ * the request with the response.
  */
-onmessage = async function ({data: { query, start, count } }) {
+onmessage = async function ({data: { query, start, count, key } }) {
     const results = (await searchIndex).search(query);
 
     postMessage({
+        key,
         results: results.map(r => {
             const reference = chapterAndVerse(r.title)
             const book = reference.book.name;
