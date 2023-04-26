@@ -65,6 +65,5 @@ export async function getSearchResults(query) {
     const paginationStart = Math.max(1, this.paginationCurrentPage - 2);
     const paginationEnd = Math.min(this.paginationTotalPages, this.paginationCurrentPage + 2);
     this.paginationPageList = Array.from({ length: paginationEnd - paginationStart + 1 }, (_, i) => i + paginationStart);
-    console.log(paginationStart, paginationEnd, this.paginationPageList)
     this.searchPending = false;
 }

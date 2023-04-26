@@ -51,7 +51,7 @@ document.addEventListener('alpine:init', () => {
         searchPending: false,
         paginationCurrentPage: 1 * (new URLSearchParams(window.location.search).get('p') ?? 1),
         paginationCount: 20,
-        paginationTotalPages: 0,
+        paginationTotalPages: 1,
         paginationPageList: [1],
         nextPage() {
             // cap at last page
