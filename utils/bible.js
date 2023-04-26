@@ -7,11 +7,12 @@ const chapterAndVerse = require('chapter-and-verse');
 const VERSION = "KJV";
 
 /**
- * Replaces substrings liks `* word *` with `<em>word</em>`
+ * Replaces substrings liks `[word]` with `<em>word</em>`
  */
 const parseItalics = (text) => text.replace(/\[(.+?)\]/g, '<em>$1</em>')
 const parseParagraphs = (text) => text.replace(/# ?/g, '')
-const smallcapsLord = (text) => text.replace(/LORD/g, '<span style="font-variant-caps: small-caps">Lord</span>')
+const smallcapsLord = (text) => text.replace(/LORD'S/g, '<span style="font-variant-caps: small-caps">Lord\'s</span>').replace(/LORD/g, '<span style="font-variant-caps: small-caps">Lord</span>')
+const theirs = (text) => text.replace(/their's/g, 'theirs')
 const trim = (text) => text.trim()
 
 const wrapVerse = (text, verse) => `<p class="verse" data-verse="${verse}"><span class="verse-no" id="${verse}">${verse}</span> ${text}</p>`
@@ -21,6 +22,7 @@ function cleanText(text) {
         parseParagraphs,
         parseItalics,
         smallcapsLord,
+        theirs,
         trim
     ]
     return mappers.reduce((text, fn) => fn(text), text)
@@ -53,7 +55,6 @@ async function main() {
         if (index === -1) return undefined;
         return chapterList[index - 1];
     }
-    console.log(chapterList);
 
     const chapters = Object.entries(books).map(([book, { chapters, slug: bookSlug }]) => Object.entries(chapters).map(([chapter, verses]) => ({
         book,
