@@ -49,6 +49,7 @@ eleventyComputed:
       id="site-wrapper" 
       x-data="searchContext"
       x-init="if (query) { getReferenceResults(query); getSearchResults(query); }"
+      @popstate.window="query = new URLSearchParams(window.location.search).get('q') ?? ''; getReferenceResults(query); getSearchResults(query);"
     >
       <header class="container p-1 bg-dark">
           <div class="row g-0">
@@ -64,7 +65,7 @@ eleventyComputed:
                     class="form-control" 
                     placeholder="Search/Go to..." 
                     @keyup.enter="GoToReference($event.target.value)"
-                    @keydown="setPage(0)"
+                    @keydown="setPage(1)"
                     @input.debounce="
                       setLocationQuery(query);
                       getReferenceResults(query); 
