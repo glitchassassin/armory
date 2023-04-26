@@ -34,12 +34,12 @@ function initializeCopyPaste() {
 
             const fromNode = selection.getRangeAt(range).startContainer;
             const fromElement = fromNode.nodeType === Node.TEXT_NODE ? fromNode.parentElement : fromNode;
-            const fromBook = fromElement.closest('[data-book]').dataset.book.replace(/[^a-z]/gi, '');
+            const fromBook = fromElement.closest('[data-book]').dataset.book;
             const fromChapter = fromElement.closest('[data-chapter]').dataset.chapter.replace(/[^\d]/g, '');
             const fromVerse = fromElement.closest('[data-verse]').dataset.verse;
             const toNode = selection.getRangeAt(range).endContainer;
             const toElement = toNode.nodeType === Node.TEXT_NODE ? toNode.parentElement : toNode;
-            const toBook = toElement.closest('[data-book]').dataset.book.replace(/[^a-z]/gi, '');
+            const toBook = toElement.closest('[data-book]').dataset.book;
             const toChapter = toElement.closest('[data-chapter]').dataset.chapter.replace(/[^\d]/g, '');
             const toVerse = toElement.closest('[data-verse]').dataset.verse;
 
