@@ -16,7 +16,7 @@ window.addEventListener('hashchange', (event) => {
 
         const chapter = url.pathname;
 
-        const element = document.querySelector(`[data-chapter="${chapter}"]`)?.querySelector(`[data-verse="${hash}"] .verse-no`);
+        const element = document.querySelector(`[data-chapter-slug="${chapter}"]`)?.querySelector(`[data-verse="${hash}"] .verse-no`);
 
         if (element) element.scrollIntoView();
     }, 100);

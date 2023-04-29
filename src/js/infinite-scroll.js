@@ -3,7 +3,7 @@ import baseUrl from "./base-url";
 const loading = {}
 
 export async function loadChapter(chapter) {
-    if (!chapter || loading[chapter] || document.querySelector(`div[data-chapter="${chapter}"]`)) return; // already loaded
+    if (!chapter || loading[chapter] || document.querySelector(`div[data-chapter-slug="${chapter}"]`)) return; // already loaded
 
     loading[chapter] = true;
 
@@ -19,8 +19,8 @@ export async function loadChapter(chapter) {
     const prevChapter = content.getAttribute('data-prev-chapter');
 
     // insert content into dom before next chapter or after previous chapter
-    const nextChapterDom = nextChapter && document.querySelector(`div[data-chapter="${nextChapter}"]`);
-    const prevChapterDom = prevChapter && document.querySelector(`div[data-chapter="${prevChapter}"]`);
+    const nextChapterDom = nextChapter && document.querySelector(`div[data-chapter-slug="${nextChapter}"]`);
+    const prevChapterDom = prevChapter && document.querySelector(`div[data-chapter-slug="${prevChapter}"]`);
 
     if (nextChapterDom) {
         const scrollElement = document.querySelector('#site-content');
@@ -35,7 +35,7 @@ export async function loadChapter(chapter) {
 }
 
 export function chapterIntersected(chapter) {
-    const chapterData = document.querySelector(`div[data-chapter="${chapter}"]`).dataset;
+    const chapterData = document.querySelector(`div[data-chapter-slug="${chapter}"]`).dataset;
     document.title = chapterData.title;
     history.replaceState(null, "", baseUrl() + chapter);
 
