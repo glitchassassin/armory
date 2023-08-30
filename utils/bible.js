@@ -15,7 +15,7 @@ const smallcapsLord = (text) => text.replace(/LORD'S/g, '<span style="font-varia
 const theirs = (text) => text.replace(/their's/g, 'theirs')
 const trim = (text) => text.trim()
 
-const wrapVerse = (text, verse) => `<p class="verse" data-verse="${verse}"><span class="verse-no" id="${verse}">${verse}</span> ${text}</p>`
+const wrapVerse = (text, verse) => ({ verse, text })
 
 function cleanText(text) {
     const mappers = [
@@ -41,7 +41,7 @@ async function main() {
             chapters: {},
         }
         books[book].chapters[parsedReference.chapter] ??= {};
-        books[book].chapters[parsedReference.chapter][parsedReference.from] = cleanText(wrapVerse(verses[reference], parsedReference.from));
+        books[book].chapters[parsedReference.chapter][parsedReference.from] = wrapVerse(cleanText(verses[reference]), parsedReference.from);
     }
 
     const chapterList = Object.entries(books).map(([book, { chapters }]) => Object.keys(chapters).map(chapter => `/${slugify(book, { lower: true })}/${chapter}/`)).flat();
@@ -60,7 +60,7 @@ async function main() {
         book,
         chapter,
         slug: `${bookSlug}${chapter}/`,
-        content: Object.values(verses).join("\n"),
+        verses: Object.values(verses),
         nextChapter: nextChapter(`${bookSlug}${chapter}/`),
         prevChapter: prevChapter(`${bookSlug}${chapter}/`),
     }))).flat();

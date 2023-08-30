@@ -13,7 +13,7 @@ export async function loadChapter(chapter) {
     const html = await res.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-    const content = doc.getElementById('content');
+    const content = doc.querySelector(`div[data-chapter-slug="${chapter}"]`);
 
     const nextChapter = content.getAttribute('data-next-chapter');
     const prevChapter = content.getAttribute('data-prev-chapter');

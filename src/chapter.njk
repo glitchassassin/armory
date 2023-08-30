@@ -5,18 +5,16 @@ meta:
 pagination:
     data: bible.chapters
     size: 1
-    alias: chapter
-permalink: "{{ chapter.slug }}"
+    alias: currentChapter
+permalink: "{{ currentChapter.slug }}"
 eleventyComputed:
-    title: "Armorer | {{ bible.books[chapter.book].title }} {{ chapter.chapter }}"
-    pageHeader: "Chapter {{ chapter.chapter }}"
-    prevPage: "{{ chapter.prevChapter }}"
-    nextPage: "{{ chapter.nextChapter }}"
+    title: "Armorer | {{ bible.books[currentChapter.book].title }} {{ currentChapter.chapter }}"
+    pageHeader: "Chapter {{ currentChapter.chapter }}"
     meta:
         description: "A beautiful minimal Bible reading experience."
 ---
-
-<div id="content" x-data="infiniteScrollContext" class="position-relative d-flex" data-book="{{ chapter.book }}" data-chapter="{{ chapter.chapter }}" data-chapter-slug="{{ chapter.slug }}" data-title="{{ title }}" data-next-chapter="{{ nextPage }}" data-prev-chapter="{{ prevPage }}">
+{% macro renderChapter(chapter, withVerseIds = false) %}
+<div id="content" x-data="infiniteScrollContext" class="position-relative d-flex" data-book="{{ chapter.book }}" data-chapter="{{ chapter.chapter }}" data-chapter-slug="{{ chapter.slug }}" data-title="{{ title }}" data-next-chapter="{{ chapter.nextChapter }}" data-prev-chapter="{{ chapter.prevChapter }}">
     <div x-intersect.full="chapterIntersected('{{ chapter.slug }}');" class="pe-none position-absolute top-0 start-0 end-0" style="height: 50vh;"></div>
     <main class="container">
         <header class="sticky-top">
@@ -28,11 +26,24 @@ eleventyComputed:
             </div>
         </header>
         <article>
-            {{ chapter.content | safe }}
+            {% for verse in chapter.verses %}
+            <p class="verse" data-verse="{{verse.verse}}">
+                <span class="verse-no" {% if withVerseIds %}id="{{verse.verse}}"{% else %}data-id="{{verse.verse}}"{% endif %}>
+                    {{verse.verse}}
+                </span> 
+                {{verse.text | safe}}
+            </p>
+            {% endfor %}
         </article>
     </main>
     <div x-intersect.full="chapterIntersected('{{ chapter.slug }}');" class="pe-none position-absolute bottom-0 start-0 end-0" style="height: 50vh;"></div>
+    {# Provides padding to immediately scroll to the correct verse without running into the bottom of the window #}
+    <div class="pe-none position-absolute top-100 start-0 end-0" style="height: 100vh;"></div>
 </div>
+{% endmacro %}
+
+{{renderChapter(currentChapter, true)}}
+{% if pagination.page.next %} {{renderChapter(pagination.page.next)}} {% endif %}
 
 {% rollup "src/js/infinite-scroll.js" %}
 {% rollup "src/js/copy-paste.js" %}
