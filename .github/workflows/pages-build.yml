@@ -30,7 +30,7 @@ jobs:
     - name: Build the site
       run: npm run build
     - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v1.0.7
+      uses: actions/upload-pages-artifact@v4
 
   # Deploy job
   deploy:
@@ -53,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
