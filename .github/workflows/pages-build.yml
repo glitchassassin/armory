@@ -30,7 +30,7 @@ jobs:
     - name: Build the site
       run: npm run build
     - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v4
+      uses: actions/upload-pages-artifact@v3
 
   # Deploy job
   deploy:
