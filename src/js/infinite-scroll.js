@@ -2,6 +2,27 @@ import baseUrl from "./base-url";
 
 const loading = {}
 
+let touching = false;
+let touchEndHandlers = [];
+document.addEventListener("touchstart", () => touching = true)
+function handleTouchEnd(ev) {
+    if (ev.touches.length === 0) {
+        touchEndHandlers.forEach(fn => fn());
+        touchEndHandlers = [];
+    }
+}
+document.addEventListener("touchend", handleTouchEnd)
+document.addEventListener("touchcancel", handleTouchEnd)
+async function waitForTouchEnd() {
+    return new Promise((resolve) => {
+        if (!touching) {
+            resolve();
+        } else {
+            touchEndHandlers.push(resolve);
+        }
+    })
+}
+
 export async function loadChapter(chapter) {
     if (!chapter || loading[chapter] || document.querySelector(`div[data-chapter-slug="${chapter}"]`)) return; // already loaded
 
@@ -21,6 +42,8 @@ export async function loadChapter(chapter) {
     // insert content into dom before next chapter or after previous chapter
     const nextChapterDom = nextChapter && document.querySelector(`div[data-chapter-slug="${nextChapter}"]`);
     const prevChapterDom = prevChapter && document.querySelector(`div[data-chapter-slug="${prevChapter}"]`);
+
+    await waitForTouchEnd();
 
     if (nextChapterDom) {
         const scrollElement = document.querySelector('#site-content');
