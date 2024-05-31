@@ -33,8 +33,9 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.3.0",
+    "@sindresorhus/slugify": "^2.2.1",
     "eleventy-plugin-rollup": "^1.2.1",
-    "rollup": "^3.10.0",
-    "kjv": "^1.0.0"
+    "kjv": "^1.0.0",
+    "rollup": "^3.10.0"
   }
 }
