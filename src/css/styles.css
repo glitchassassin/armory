@@ -106,19 +106,56 @@ ul.toc a {
 /**
  * Highlighting verses
  */
-.verse {
+p {
     position: relative;
-    padding-left: 2em;
+    text-indent: 1em;
+}
+
+*[data-indent] {
+    display: block;
+    text-indent: 0;
+}
+*[data-indent="1"] {
+    padding-left: 2.5em;
+}
+*[data-indent="2"] {
+    padding-left: 3.5em;
+}
+*[data-indent="3"] {
+    padding-left: 4.5em;
 }
 
 .verse-no {
-    position: absolute;
-    left: 0;
+    vertical-align: super;
+    line-height: 0;
+    font-size: 0.75em;
+    margin-right: 0.2em;
     scroll-margin-top: 100px;
     -webkit-user-select: none !important;
     -moz-user-select: none !important;
     user-select: none !important;
     color: var(--bs-dark-text);
+}
+
+.verse-no.poem {
+    position: absolute;
+    left: 0px;
+    margin-top: 0.6em;
+}
+
+.small-caps {
+    font-variant: small-caps;
+}
+
+article h2 {
+    font-size: 1.3em;
+}
+article h3 {
+    font-size: 1.15em;
+}
+
+.footnote {
+    display: none;
 }
 
 .hide-verse-numbers .verse-no {

@@ -57,6 +57,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
   eleventyConfig.addWatchTarget("src/js/");
   eleventyConfig.addWatchTarget("src/css/styles.css");
+  eleventyConfig.addGlobalData("site.base_url", process.env.BASE_URL || "https://armorer.io");
   return {
     dir: {
       input: "src",

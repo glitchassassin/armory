@@ -1,0 +1,42 @@
+name: Build Version
+
+on:
+  workflow_call:
+    inputs:
+      domain:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'npm'
+    - name: apt install with cache
+      uses: awalsh128/cache-apt-pkgs-action@v1.2.2
+      with:
+        packages: build-essential nodejs npm libcurl4-gnutls-dev libicu-dev zlib1g-dev pkg-config cmake subversion
+    - name: install dependencies
+      run: npm ci
+    - name: render Bible
+      run: npm run generate ${{ inputs.version }}
+    - name: Build the site
+      run: npm run build
+      env:
+        BASE_URL: https://${{ inputs.domain }}
+    - name: Set CNAME
+      run: echo '${{ inputs.domain }}' > _site/CNAME
+    - name: Push to pages/${{ inputs.version }} branch
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git commit -m 'Deploy to pages/${{ inputs.version }}'
+        git push origin HEAD:refs/heads/pages/${{ inputs.version }}
