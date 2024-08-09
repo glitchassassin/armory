@@ -129,6 +129,7 @@ p {
     vertical-align: super;
     line-height: 0;
     font-size: 0.75em;
+    margin-right: 0.2em;
     scroll-margin-top: 100px;
     -webkit-user-select: none !important;
     -moz-user-select: none !important;

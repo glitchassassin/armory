@@ -94,7 +94,10 @@ function renderChapter(chapter, withVerseIds) {
       // check if next verse begins a paragraph
       if (typeof line.content[0] === "string" && line.content[0].startsWith("¶")) {
         endCurrentParagraph();
-        line.content[0] = line.content[0].slice(1);
+        line.content[0] = line.content[0].slice(1).trim();
+      } else if (typeof line.content[0] === "object" && "text" in line.content[0] && line.content[0].text.startsWith("¶")) {
+        endCurrentParagraph();
+        line.content[0].text = line.content[0].text.slice(1).trim();
       }
       // remap paragraph markers
       line.content = line.content.flatMap((chunk) => {
@@ -108,6 +111,16 @@ function renderChapter(chapter, withVerseIds) {
               return [{ lineBreak: true }, v.trim()];
             }
           });
+        } else if (typeof chunk === "object" && "text" in chunk) {
+          return chunk.text.split(/¶/).flatMap((v, i) => {
+            if (v.trim() === "") {
+              return []
+            } else if (i === 0) {
+              return [{ ...chunk, text: v.trim() }];
+            } else {
+              return [{ lineBreak: true }, { ...chunk, text: v.trim() }];
+            }
+          });
         } else {
           return [chunk];
         }
@@ -116,14 +129,14 @@ function renderChapter(chapter, withVerseIds) {
        * End paragraph logic
        */
 
-      currentParagraph += ` <span class="verse-no ${line.content[0]?.poem ? "poem" : ""}" ${verseId}>${line.number}</span>`;
+      currentParagraph += `<span class="verse-no ${line.content[0]?.poem ? "poem" : ""}" ${verseId}>${line.number}</span>`;
 
       for (const chunk of line.content) {
         if (typeof chunk === "string") {
-          currentParagraph += smallcapsLord(` ${chunk}`);
+          currentParagraph += smallcapsLord(`${chunk} `);
         } else if (typeof chunk === "object") {
           if ("noteId" in chunk) {
-            currentParagraph += ` <span class="footnote">${chunk.noteId}</span>`;
+            currentParagraph += `<span class="footnote">${chunk.noteId}</span> `;
           } else if ("text" in chunk) {
             if (chunk.poem && chunk.wordsOfJesus)
               throw new Error(
@@ -133,7 +146,7 @@ function renderChapter(chapter, withVerseIds) {
             if (chunk.poem) {
               currentParagraph += `<span data-indent="${chunk.poem}">${chunk.text}</span>`;
             } else if (chunk.wordsOfJesus) {
-              currentParagraph += ` <span class="words-of-jesus">${chunk.text}</span>`;
+              currentParagraph += `<span class="words-of-jesus">${chunk.text}</span> `;
             }
           } else if ("lineBreak" in chunk) {
             endCurrentParagraph();
