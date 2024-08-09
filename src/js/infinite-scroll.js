@@ -57,11 +57,12 @@ export async function loadChapter(chapter) {
     }
 }
 
-export function chapterIntersected(chapter) {
+export function chapterIntersected(chapter, full = false) {
     const chapterData = document.querySelector(`div[data-chapter-slug="${chapter}"]`).dataset;
-    document.title = chapterData.title;
-    history.replaceState(null, "", baseUrl() + chapter);
-
+    if (full) {
+        document.title = chapterData.title;
+        history.replaceState(null, "", baseUrl() + chapter);
+    }
     loadChapter(chapterData.nextChapter);
     loadChapter(chapterData.prevChapter);
 }
