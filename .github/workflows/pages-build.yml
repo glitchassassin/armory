@@ -3,16 +3,14 @@ name: Pages Build
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build:
+  kjv:
     uses: ./.github/workflows/build-version.yml
     with:
       domain: "armorer.io"
       version: "eng_kjv"
-  build:
+  bsb:
     uses: ./.github/workflows/build-version.yml
     with:
       domain: "bsb.armorer.io"
