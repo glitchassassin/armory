@@ -8,7 +8,11 @@ import chapterAndVerse from "chapter-and-verse";
     
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const TRANSLATIONS_TO_BUILD = ["BSB", "eng_kjv"];
+const TRANSLATION_TO_BUILD = process.argv[2];
+if (!TRANSLATION_TO_BUILD) {
+  console.error("Usage: node utils/helloao_bible.mjs <translation>");
+  process.exit(1);
+}
 const BASENAME = "https://bible.helloao.org";
 
 /**
@@ -147,8 +151,7 @@ function renderChapter(chapter, withVerseIds) {
 }
 
 async function main() {
-  for (const translation of TRANSLATIONS_TO_BUILD) {
-    const translationBooks = await getBooks(translation);
+    const translationBooks = await getBooks(TRANSLATION_TO_BUILD);
     console.log("Processing translation", translationBooks.translation.englishName)
     const books = {};
     const chapters = {};
@@ -192,7 +195,7 @@ async function main() {
 
     const filename = path.join(
       __dirname,
-      `../src/_data/${translationBooks.translation.id}.bible.json`
+      "../src/_data/bible.json"
     );
     await writeFile(
       filename,
@@ -203,6 +206,5 @@ async function main() {
       })
     );
   }
-}
 
 main().catch(console.error);

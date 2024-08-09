@@ -1,4 +1,4 @@
-name: Eleventy Build & Pages Deploy
+name: Pages Build
 
 on:
   push:
@@ -7,50 +7,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-        cache: 'npm'
-    - name: apt install with cache
-      uses: awalsh128/cache-apt-pkgs-action@v1.2.2
-      with:
-        # Space delimited list of packages to install.
-        packages: build-essential nodejs npm libcurl4-gnutls-dev libicu-dev zlib1g-dev pkg-config cmake subversion
-    - name: install dependencies
-      run: npm ci
-    - name: render Bible
-      run: npm run generate:kjv
-    - name: Build the site
-      run: npm run build
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v3
-
-  # Deploy job
-  deploy:
-    # Add a dependency to the build job
-    needs: build
-    if: github.event_name == 'push'
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    # Specify runner + deployment step
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    uses: ./.github/workflows/build-version.yml
+    with:
+      domain: "armorer.io"
+      version: "eng_kjv"
+  build:
+    uses: ./.github/workflows/build-version.yml
+    with:
+      domain: "bsb.armorer.io"
+      version: "BSB"

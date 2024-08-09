@@ -6,7 +6,7 @@
   "scripts": {
     "build": "eleventy",
     "start": "eleventy --serve",
-    "generate:kjv": "node utils/bible.js"
+    "generate": "node utils/helloao_bible.mjs"
   },
   "repository": {
     "type": "git",
