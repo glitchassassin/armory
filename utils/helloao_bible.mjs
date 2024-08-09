@@ -1,7 +1,14 @@
 import slugify from "@sindresorhus/slugify";
 import { writeFile } from "node:fs/promises";
+import path from "node:path";
 
-const TRANSLATIONS_TO_BUILD = ["engbsb"];
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import chapterAndVerse from "chapter-and-verse";
+    
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const TRANSLATIONS_TO_BUILD = ["BSB", "eng_kjv"];
 const BASENAME = "https://bible.helloao.org";
 
 /**
@@ -39,6 +46,12 @@ async function getChapter(chapterUrl) {
   return api(chapterUrl);
 }
 
+function smallcapsLord(text) {
+  return text
+    .replace(/LORD'S/g, "<span class='small-caps'>Lord's</span>")
+    .replace(/LORD/g, "<span class='small-caps'>Lord</span>");
+}
+
 /**
  * @param {import('./helloao').TranslationBookChapter} chapter
  * @param {boolean} withVerseIds
@@ -68,10 +81,42 @@ function renderChapter(chapter, withVerseIds) {
       const verseId = withVerseIds
         ? `id="${line.number}"`
         : `data-id="${line.number}"`;
-      currentParagraph += ` <span class="verse-no" ${verseId}>${line.number}</span>`;
+      
+      /**
+       * Paragraph logic
+       * The eng_kjv version from helloao has paragraph markers instead of line breaks
+       * Here, we normalize on the line break format used by other versions
+       */
+      // check if next verse begins a paragraph
+      if (typeof line.content[0] === "string" && line.content[0].startsWith("¶")) {
+        endCurrentParagraph();
+        line.content[0] = line.content[0].slice(1);
+      }
+      // remap paragraph markers
+      line.content = line.content.flatMap((chunk) => {
+        if (typeof chunk === "string") {
+          return chunk.split(/¶/).flatMap((v, i) => {
+            if (v.trim() === "") {
+              return []
+            } else if (i === 0) {
+              return [v.trim()];
+            } else {
+              return [{ lineBreak: true }, v.trim()];
+            }
+          });
+        } else {
+          return [chunk];
+        }
+      })
+      /**
+       * End paragraph logic
+       */
+
+      currentParagraph += ` <span class="verse-no ${line.content[0]?.poem ? "poem" : ""}" ${verseId}>${line.number}</span>`;
+
       for (const chunk of line.content) {
         if (typeof chunk === "string") {
-          currentParagraph += ` ${chunk}`;
+          currentParagraph += smallcapsLord(` ${chunk}`);
         } else if (typeof chunk === "object") {
           if ("noteId" in chunk) {
             currentParagraph += ` <span class="footnote">${chunk.noteId}</span>`;
@@ -82,8 +127,7 @@ function renderChapter(chapter, withVerseIds) {
                   JSON.stringify(chapter)
               );
             if (chunk.poem) {
-              endCurrentParagraph();
-              render += `<p data-indent="${chunk.poem}">${chunk.text}</p>`;
+              currentParagraph += `<span data-indent="${chunk.poem}">${chunk.text}</span>`;
             } else if (chunk.wordsOfJesus) {
               currentParagraph += ` <span class="words-of-jesus">${chunk.text}</span>`;
             }
@@ -111,9 +155,12 @@ async function main() {
     const chapterSlugs = [];
     for (const book of translationBooks.books) {
       console.log('[Starting]', book.commonName);
+      const bookDetails = chapterAndVerse(book.commonName);
       books[book.name] = {
         title: book.name,
         slug: `/${slugify(book.name)}/`,
+        testament: bookDetails.book.testament,
+        numberOfChapters: book.numberOfChapters,
       };
       let nextChapter = book.firstChapterApiLink;
       while (nextChapter) {
@@ -134,6 +181,7 @@ async function main() {
           book: books[book.name],
           content: renderChapter(chapter),
           title: `${book.name} ${chapter.chapter.number}`,
+          number: chapter.chapter.number,
           slug: chapterSlug,
           nextChapter: null,
           prevChapter,
